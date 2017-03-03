@@ -1,0 +1,95 @@
+Completed:
+gameLoop -- start end screen. main gameplay is done. failure state is added
+Update spawn behavior
+-- once the enmy has past the end of the screen then reinitialize them
+add score
+- + 10 everytime an enemy is killed
+health pickups
+limit number of player bullets
+- add in enemy manager
+
+pickup should affect bullets - DONE
+- its possible for the player to sit in one position and shoot left and right without any risk of being hit which makes for a boring game
+- one way to balance this is to make the enemy movement or spawn more sofisticated e.g spawns from the top side of the screen,
+  have the velocity of the enemies be more dynamic,
+- the option impleted will be that the picks will give health and bullets
+- controlling the player is the most fun and interesting part of the game and more movement should be encouraged
+- having pickups give the player bullets and health should make the player move more
+Particleos
+add in particles + background to sketch
+add particles on death
+initial enemy explosion particles
+
+initial pickup particles
+bullet particle
+add zoom in particle to pickup
+
+space out picks up more
+-- have a picks not be able to spawn close to each other
+-- currenting their spawn position is a random point on the screen
+-- Fix1: divide screen into quaters and cycle spawning pickpus in them
+-- Fix2: check the positions of all active pickups when spawning new pickups if its not outside the minmum
+         distance try and spawn else where
+-- what was implemented was Fix plus a check is made if the pickup spawn position is close to the player
+   if it is then the next area in the array is choosen
+bullets can be killed
+background shimmering
+have enemy explosion affect other enemies and player
+-- when a collision happens bettween bullet to enemy or player to enemy
+   Collides with player: a force pointing away from collided enemy apply to player and enemies with a certain distance
+   Collides with bullet: apply to surrounding enemies within a certain distance
+enemy off screen position resets
+-- explosive force should be affected by the distance it is
+- screen shake. with a explosion happens the screen shakes
+
+Current:
+-- enemy effects makes screen dark
+-- enemy that
+-- enemy that leaves a flame/lave path behind it that hurts the player
+
+Defered:
+tweek particles
+tweek explosion
+add enemys interestings enemies - 5
+2 more types of enemy that will of ellipse and triangles
+ideas
+-- seeks,
+   random walkers,
+   emenies with a centain flight path like in 1942
+   enemies that spawn other enemies
+   enemy that leaves a flame/lave path behind it that hurts the player
+-- have triangles slowly that steer towards enemy
+-- enemies that follow the player is not that fun to play
+-- ellipse lays background that hurts enemies
+
+player better acceleration integration
+add health and bullet bar
+particle pool
+have explosions effect the player and other game objects
+player rocket exhausts
+-- have particles only created when the mouse is release doesing look that good.
+-- an option to make it better would be to have emit particles for a set amount
+   of time once the mouse is release
+art for enemies pick ups
+update particle to use dt
+add enemy made of cells - 5
+tween background in and out - 5
+remove translate from triangles fn set x, y directly
+has audio lead interact with background of the game
+add text particles - 1
+music + sounds
+-- background atmosphere
+-- gun sound
+--
+Add seek movement
+-- avoid other enemies
+
+
+Other:
+add type drummer mechcanic into game
+entity bucket
+a object("data stucture") that adds entities into different arrays depending on this type
+
+interesting enemies
+
+most shumps enemy's movement is based on a pattern or there move directly to the player
