@@ -775,16 +775,20 @@ function jsonToP5(data){
         } else if (data.radius) {
             fn(data.postion.x, data.position.y, data.radius, data.radius);
         } else {
-            fn(data.postion.x, data.position.y, data.deminsion, data.deminsion);
+            fn(data.postion.x, data.position.y, data.deminsion.x, data.deminsion.y);
         }
-    }
+    };
     var validFunctions = ["position",
                           "deminsion",
-                          // width height radius 
-                          "length"
+                          // width height radius
+                          "width",
+                          "height",
+                          "radius",
+                          "length",
+                          "scale",
 
                           "type",
-                          "rect", 
+                          "rect",
                           "ellipse",
                           "line",
                           "fill",
@@ -792,29 +796,46 @@ function jsonToP5(data){
                           "strokeWeight",
                           "noFill",
                           "noStroke"];
+
+    function linePassThrew(p1, p2){
+        //draw of line that passes threw p1 from p2
+        // ellipse(p1.x, p1.y, 10, 10);
+        var towards = p2.copy().sub(p1);
+        towards.mult(-1);
+        towards.add(p1);
+        line(p2.x, p2.y, towards.x, towards.y);
+    }
+
     var keys = Object.keys(data);
-    var values = Object.values(data); 
+    var values = Object.values(data);
     for (var i = 0; i < values.length; i++) {
-        var v = values[i]
+        var v = values[i];
         var k = keys[i];
         if(data.type === "rect" ){
-            if(data.width && data.height){
-                rect(data.postion.x, data.position.y, data.width, data.height);
+            shapeFn(rect, data);
         } else if(data.type === "ellipse"){
-            if(data.width && data.height){
-                ellipse(data.postion.x, data.position.y, data.width, data.height);
-            } else if (data.radius) {
-                ellipse(data.postion.x, data.position.y, data.radius, data.radius);
-            } else {
-                ellipse(data.postion.x, data.position.y, data.deminsion, data.deminsion);
-            }
+            shapeFn(ellipse, data);
+
+        } else if(data.type === "triangle"){
+            var x2 = data.height * data.scale;
+            var y2 = 0;
+            var x3 = data.width * data.scale; // 30
+            var y3 = data.height * data.scale; // 60
+            push();
+            translate(data.position.x, self.position.y);
+            rotate(data.angle);
+            triangle(0, 0, x2, y2, x3, y3);
+            pop();
+        } else if(data.type === "line-centered"){
+            linePassThrew(self.pos, createVector(data.position.x + cos(data.angle) * data.scale,
+                                                 data.position.y + sin(data.angle) * data.scale));
         }
         if(validFunctions.indexOf[k] != -1){
             console.log(k + "("+ v + ")");
             var fn = eval(k);
             if(v instanceof Array){
                 fn.apply(null, v);
-            } 
+            }
             } else{
                 fn(v);
             }
