@@ -770,14 +770,19 @@ function ParticleSystem(){
 
 function jsonToP5(data){
     var shapeFn = function (fn, data){
+        push();
+        translate(data.position);
+        rotate(data.angle);
         if(data.width && data.height){
-            fn(data.postion.x, data.position.y, data.width, data.height);
+            fn(0, 0, data.width, data.height);
         } else if (data.radius) {
-            fn(data.postion.x, data.position.y, data.radius, data.radius);
+            fn(0, 0, data.radius, data.radius);
         } else {
-            fn(data.postion.x, data.position.y, data.deminsion.x, data.deminsion.y);
+            fn(0, 0, data.deminsion.x, data.deminsion.y);
         }
+        pop();
     };
+
     var validFunctions = ["position",
                           "deminsion",
                           // width height radius
