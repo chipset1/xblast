@@ -769,39 +769,22 @@ function ParticleSystem(){
 }
 
 function jsonToP5(data){
-    var shapeFn = function (fn, data){
-        push();
-        translate(data.position);
-        rotate(data.angle);
-        if(data.width && data.height){
-            fn(0, 0, data.width, data.height);
-        } else if (data.radius) {
-            fn(0, 0, data.radius, data.radius);
-        } else {
-            fn(0, 0, data.deminsion.x, data.deminsion.y);
-        }
-        pop();
-    };
-
-    var validFunctions = ["position",
-                          "deminsion",
-                          // width height radius
-                          "width",
-                          "height",
-                          "radius",
-                          "length",
-                          "scale",
-
-                          "type",
-                          "rect",
-                          "ellipse",
-                          "line",
-                          "fill",
-                          "stroke",
-                          "strokeWeight",
-                          "noFill",
-                          "noStroke"];
-
+    // argslist ["position",
+    //           "deminsion", // width and height
+    //           "width",
+    //           "height",
+    //           "radius", // for circles
+    //           "scale",
+    //           "type",
+    //           "rect",
+    //           "ellipse",
+    //           "line",
+    //           "fill",
+    //           "colorMode",
+    //           "stroke",
+    //           "strokeWeight",
+    //           "noFill",
+    //           "noStroke"];
     function linePassThrew(p1, p2){
         //draw of line that passes threw p1 from p2
         // ellipse(p1.x, p1.y, 10, 10);
@@ -811,42 +794,91 @@ function jsonToP5(data){
         line(p2.x, p2.y, towards.x, towards.y);
     }
 
-    var keys = Object.keys(data);
-    var values = Object.values(data);
-    for (var i = 0; i < values.length; i++) {
-        var v = values[i];
-        var k = keys[i];
-        if(data.type === "rect" ){
-            shapeFn(rect, data);
-        } else if(data.type === "ellipse"){
-            shapeFn(ellipse, data);
+    var shapeFn = function (fn){
+        push();
+        translate(data.position.x, data.position.y);
+        rotate(data.angle);
+        if(data.width && data.height){
+            fn(0, 0, data.width, data.height);
+        } else if (data.radius) {
+            fn(0, 0, data.radius * 2, data.radius * 2);
+        } else {
+            fn(0, 0, data.deminsion.x, data.deminsion.y);
+        }
+        pop();
+    };
 
-        } else if(data.type === "triangle"){
-            var x2 = data.height * data.scale;
+    var handleType = function(k){
+        dt(k, data[k]);
+        data.angle = data.angle || 0;
+        data.scale = data.scale || 1;
+        if(data.type === "rect" || k === "rect"){
+            shapeFn(rect);
+        } else if(data.type === "ellipse" || k === "ellipse"){
+            shapeFn(ellipse);
+
+        } else if(data.type === "triangle" || k === "triangle"){
+            var x2 = data.width * data.scale;
             var y2 = 0;
             var x3 = data.width * data.scale; // 30
-            var y3 = data.height * data.scale; // 60
+            var y3 = data.* data.scale; // 60
             push();
-            translate(data.position.x, self.position.y);
+            translate(data.position.x, data.position.y);
             rotate(data.angle);
             triangle(0, 0, x2, y2, x3, y3);
             pop();
         } else if(data.type === "line-centered"){
-            linePassThrew(self.pos, createVector(data.position.x + cos(data.angle) * data.scale,
-                                                 data.position.y + sin(data.angle) * data.scale));
-        }
-        if(validFunctions.indexOf[k] != -1){
-            console.log(k + "("+ v + ")");
-            var fn = eval(k);
-            if(v instanceof Array){
-                fn.apply(null, v);
-            }
-            } else{
-                fn(v);
-            }
+            linePassThrew(data.position, createVector(data.position.x + cos(data.angle) * data.scale,
+                                                      data.position.y + sin(data.angle) * data.scale));
         }
     };
-}
+
+    var keyToFns = {rect: rect,
+                    ellipse: ellipse,
+                    line: line,
+                    triangle: triangle,
+                    fill: fill,
+                    noFill: noFill,
+                    stroke: stroke,
+                    strokeWeight: strokeWeight,
+                    noStroke: noStroke};
+
+    var isValidFunction = function(k){
+        return Object.keys(keyToFns).indexOf(k) !== -1;
+    };
+    var isShape = (k) => {
+        var shapes = ["rect", "ellipse", "line", "triangle"];
+        return shapes.indexOf(k) !== -1;
+    };
+
+    var validType= (k) => {
+        var types = ["rect", "ellipse", "line-centered", "triangle"];
+        return types.indexOf(k) !== -1;
+    };
+    // clog(keyToFns);
+
+    var keys = Object.keys(data);
+    var values = Object.values(data);
+    push();
+    for (var i = 0; i < values.length; i++) {
+        var v = values[i];
+        var k = keys[i];
+        if(data.type && validType(data.type)){
+            handleType(k);
+        }
+
+        // if(isValidFunction(k)){
+        //     var fn = keyToFns[k];
+        //     if(v instanceof Array){
+        //         // clog(fn, v);
+        //         fn.apply(null, v);
+        //     } else{
+        //         fn(v);
+        //     }
+        // }
+    }
+    pop();
+};
 
 function Particle({pos,
                    vel,
@@ -959,7 +991,7 @@ function Particle({pos,
         if(fillColor) fill(colorMapWithBetween(fillColor));
 
         if(type === "rect"){
-            {:rect []}
+            // {:rect []}
             rect(self.pos.x, self.pos.y, self.dim.x * s, self.dim.y * s);
         } else if(type === "ellipse") {
             ellipse(self.pos.x, self.pos.y, self.dim.x * s, self.dim.y * s);
