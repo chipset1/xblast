@@ -215,11 +215,59 @@ function setImageVisible(id, visible) {
 function circle(pos, size){
     ellipse(pos.x, pos.y, size, size);
 }
+
 function square(pos, size){
     rect(pos.x, pos.y, size);
 }
+
 function returnArgs(){
     return Array.from(arguments);
+}
+
+function autoDat(obj){
+    // only numbers
+    // min and max 0 100 default
+    // {param: {min: 0 max: 20}}
+    var gui = new dat.GUI();
+    var keys = Object.keys(obj);
+    keys.forEach(function(k){
+        if(typeof(obj[k]) === "object"){
+            var args = obj[k];
+            args.min = args.min || 0;
+            args.max = args.max || 100;
+            obj[k] = args.min;
+            gui.add(obj, k).min(args.min).max(args.max);
+        }else{
+            gui.add(obj, k).min(0).max(100);
+        }
+    });
+}
+
+function cmap(){
+    var args = Array.from(arguments);
+    var result = map.apply(null, args);
+    //example args  map(this.vel.mag(), 200, 100, 3, 0);
+    //
+    var high = args[args.length-1];
+    var low = args[args.length-2];
+    if(low > high){
+        var temp = low;
+        low = high;
+        high = temp;
+    }
+    return constrain(result, low, high);
+}
+
+function flip(){
+    var v = false;
+    return function(){
+        v = !v;
+        return v
+    };
+}
+
+function chance(percent){
+    return random(1) < percent;
 }
 
 function resScale(){
@@ -227,4 +275,25 @@ function resScale(){
     // var canvas =  createCanvas(resolution.width, resolution.height).canvas;
     // canvas.style.width =  resolution.width * resolution.scale + "px";
     // canvas.style.height = resolution.height * resolution.scale + "px";
+}
+
+function palette(t, dc_offset, amp, freq, phase){
+    // based on http://www.iquilezles.org/www/articles/palettes/palettes.htm
+    // also see http://dev.thi.ng/gradients/ for more examples and to use an interactive cosine gradient generator editor
+    var a = dc_offset;
+    var b = amp;
+    var c = freq;
+    var d = phase;
+
+    var palette = [];
+    for (var i =  0; i <  c.length; i++) {
+        c[i] *= t;
+        c[i] += d[i];
+        var r = cos(c[i] * TWO_PI);
+        r *= b[i];
+        r += a[i];
+        palette[i] = constrain(r, 0, 1);
+    }
+
+    return color(palette[0], palette[1], palette[2]);
 }
