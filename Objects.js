@@ -955,7 +955,7 @@ function Background(){
     var cells = [];
     var triangles = newTriangles();
     var backgroundTriangles = map2D(80, (x, y) =>{
-        return new Tri(random(1), random(1), x, y, 4.3, 12, 43);
+        return defaultTri(x, y, {scale: 4.3, brightness: 32, saturation: 43});
     });
 
     var timer = new Timer(100);
@@ -964,35 +964,32 @@ function Background(){
     this.maxCount = 300;
     this.count = this.maxCount;
 
+    function defaultTri(x, y, customArgs){
+        return new Tri(x, y, _.merge({scale: 2.5,
+                                      hue: 239,
+                                      saturation: 100,
+                                      brightness: 100,
+                                      shimmerData: {min: -17,
+                                                    max: 10}},
+                                     customArgs));
+    }
+
     function newTriangles(){
         var big = map2D(60, (x, y) => {
             if((x > 100 && x < 340) || (x > 600 && x < 850)){
-                var t;
                 if(chance(0.5)){
-                    t = new Tri(x, y,
-                                   {scale: 2.5,
-                                    saturation: 100,
-                                    brightness: 100,
-                                    shimmerData: {min: -17,
-                                                  max: 10}});
+                    return defaultTri(x, y);
                 } else {
-                    t =  new Tri(x, y,
-                                   {scale: 2.5,
-                                    saturation: 100,
-                                    brightness: 100,
-                                    shimmerData: {min: 0,
-                                                  max: 30}});
+                    return new defaultTri(x, y,
+                                          {hue: 159,
+                                           shimmerData: {min: 0,
+                                                         max: 30}});
                 }
-
-                // return new Tri(random(1), random(1), x, y, 2.5, 100, 100);
             }
         });
-        // var background = map2D(80, (x, y) =>{
-        //     return new Tri(random(1), random(1), x, y, 4.3, 12, 43);
-        // });
         var small = map2D(160, (x, y) =>{
             if((y > 100 && y < 340) || (y > 400 && y < 650)){
-                return new Tri(random(1), random(1), x, y, 2.2, 100, 83);
+                return new defaultTri(x, y, {scale: 2.2, brightness: 83});
             }
         });
         return _.concat(big, small); // _.concat(big, small);
@@ -1078,22 +1075,19 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
         push();
         colorMode(HSB, 360, 100, 100, 1);
         noStroke();
+
+
+        // hsb 239 68 59
+        // rgb 48 50 150
+        // b 59 s 68
+
+        // blue
+        // hsb 159 84 91
+        // rgb 38 232 165
+        // b 91 s 84
+
         var alpha = map(player.pos.dist(self.pos), 200, 0, 0.01, shimmer(0.3, 0.5, 0.85, 50));
-        fill(self.hue + shimmer(shimmerData.min, shimmerData.max), saturation, brightness, alpha);
-
-        // if(c < 0.5){
-        //     // hsb 239 68 59
-        //     // rgb 48 50 150
-        //     // b 59 s 68
-        //     // blue
-        //     fill(239 + shimmer(-17, 10), sat, self.brightness, alpha);
-        // } else {
-        //     // hsb 159 84 91
-        //     // rgb 38 232 165
-        //     // b 91 s 84
-        //     fill(159 + shimmer(0, 30), sat, self.brightness, alpha);
-        // }
-
+        fill(self.hue + shimmer(shimmerData.min, shimmerData.max), saturation, self.brightness, alpha);
         translate(x, y);
         var points = {x1: 0,
                       y1: 0,
