@@ -253,7 +253,7 @@ function PickupManger(){
     var pickups = [];
     var pickupTimer = new Timer(1000);
     var self = this;
-    var count = 0;
+    var totalSpawnedCount = 0;
     var diagonalSpawnCount = 0;
 
     // RULE OF THIRDS
@@ -323,11 +323,11 @@ function PickupManger(){
     }
 
     function spawnPickup(){
-        if(pickupTimer.canRun() && pickups.length <= 1 && count % 2 === 0){
+        if(pickupTimer.canRun() && pickups.length <= 1 && totalSpawnedCount  % 2 === 0){
             var pos;
-            if(count % 4 === 0){
+            if(totalSpawnedCount % 4 === 0){
                 pos = diagonlSpawn();
-            } else if (count % 6 == 0){
+            } else if (totalSpawnedCount % 6 == 0){
                 pos = verticalSpawn();
             } else {
                 // pickups are spawner more in the dialog positions since
@@ -353,7 +353,7 @@ function PickupManger(){
         bullets.forEach(function(b){
             pickups.forEach(function (p){
                 if(AABBvsAABB(b, p)){
-                    count++;
+                    totalSpawnedCount++;
                     score += scoreParams.hitPickup;
                     gameAudio.playPickupExplosion();
                     enemyManager.applyExplosiveForce(p);
@@ -367,7 +367,7 @@ function PickupManger(){
         for(var i = 0; i<pickups.length; i++){
             var p = pickups[i];
             if(AABBvsAABB(player, p) && !player.health.isZero()){
-                count++;
+                totalSpawnedCount++;
                 gameAudio.playPickupEffect();
                 particleSystem.pickup(player.pos.copy());
                 player.shoot.remainingBullets +=1;
