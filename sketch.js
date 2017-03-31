@@ -339,9 +339,6 @@ function PickupManger(){
                     pos = horizontalSpawn();
                 }
             }
-            clog("dcount", diagonalSpawnCount);
-            clog(count);
-            // particleSystem.pickUp(createVector(pos.x + 10, pos.y + 10));
             pickups.push(new PickUp(pos.copy().sub(10, 10)));
         }
     }
@@ -353,6 +350,20 @@ function PickupManger(){
 
     self.update = function(){
         spawnPickup();
+        bullets.forEach(function(b){
+            pickups.forEach(function (p){
+                if(AABBvsAABB(b, p)){
+                    count++;
+                    score += scoreParams.hitPickup;
+                    gameAudio.playPickupExplosion();
+                    enemyManager.applyExplosiveForce(p);
+                    p.kill();
+                    b.kill();
+                    screenShake.setRange(-8, 8);
+                    particleSystem.bulletHitPickup(p);
+                }
+            });
+        });
         for(var i = 0; i<pickups.length; i++){
             var p = pickups[i];
             if(AABBvsAABB(player, p) && !player.health.isZero()){
@@ -376,19 +387,6 @@ function update(dt){
 
     var pickups = pickupManger.getPickups();
 
-    bullets.forEach(function(b){
-        pickups.forEach(function (p){
-            if(AABBvsAABB(b, p)){
-                score += scoreParams.hitPickup;
-                gameAudio.playPickupExplosion();
-                enemyManager.applyExplosiveForce(p);
-                p.kill();
-                b.kill();
-                screenShake.setRange(-8, 8);
-                particleSystem.bulletHitPickup(p);
-            }
-        });
-    });
     bullets.forEach(function(b){
         b.display();
         b.update(dt);
