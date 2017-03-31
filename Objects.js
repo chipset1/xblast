@@ -320,9 +320,6 @@ function Player(x, y, bullets){
             ellipse( this.pos.x + this.dim.x / 2, this.pos.y + this.dim.y / 2, this.maxDistance * 2, this.maxDistance * 2);
             pop();
         }
-        fill(255);
-        text("bullets: " +  this.shoot.remainingBullets, this.pos.x, this.pos.y - 40);
-        // text("health: " + this.health.current, this.pos.x, this.pos.y - 20);
         noStroke();
         fill(fillColor);
         rect(this.pos.x, this.pos.y, this.dim.x, this.dim.y);
