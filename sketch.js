@@ -140,7 +140,6 @@ function EnemyManager(bullets){
 
         enemies.forEach(function(e){
             if(AABBvsAABB(player, e)){
-                // particleSystem.explosion(player.pos.copy());
                 gameAudio.playExplosion();
                 whiteOutMode = true;
                 e.handleCollision("player");
@@ -372,7 +371,6 @@ function PickupManger(){
 
 function update(dt){
     particleSystem.update(dt);
-    gameBackground.update();
     enemyManager.update(dt);
     pickupManger.update();
 

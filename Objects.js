@@ -350,7 +350,6 @@ function Player(x, y, bullets){
 function ParticleSystem(){
     var self = this;
     var particles = [];
-    self.dp = particles;
     var healthTimer = new Timer(100);
     self.add = function(pdata){
         particles.push(new Particle(pdata));
