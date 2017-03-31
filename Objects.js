@@ -190,7 +190,6 @@ function Enemy(){
         push();
         noStroke();
         if(whiteOutMode){
-
             var a = map(gameBackground.count, gameBackground.maxCount, 0, maxAlpha, minAlpha);
             a = max(a, updateAlpha());
             fill(255, a);
@@ -203,7 +202,6 @@ function Enemy(){
 
     this.update = function(dt){
         reInitialize();
-        // clog(self.pos);
         var scale = velScale();
         this.vel.add(this.acc);
         this.pos.add(this.vel.copy().mult(dt * scale));
@@ -309,8 +307,6 @@ function Player(x, y, bullets){
 
     this.display = function(){
         push();
-        // fill(0,0,255, 120);
-        // drawTrail();
         if(debug){
             push();
             var mouse = mouseVector();
@@ -324,7 +320,6 @@ function Player(x, y, bullets){
             ellipse( this.pos.x + this.dim.x / 2, this.pos.y + this.dim.y / 2, this.maxDistance * 2, this.maxDistance * 2);
             pop();
         }
-        // bulletOutline();
         fill(255);
         text("bullets: " +  this.shoot.remainingBullets, this.pos.x, this.pos.y - 40);
         // text("health: " + this.health.current, this.pos.x, this.pos.y - 20);
@@ -365,7 +360,6 @@ function ParticleSystem(){
     };
     self.update = function(dt){
         particles.forEach(p =>{
-            // println(p);
             p.update();
         });
         for(var i = particles.length - 1; i >= 0; i--){
@@ -378,7 +372,6 @@ function ParticleSystem(){
     self.health = function(player){
         if(!healthTimer.canRun()) return;
         var hue = {start: 140};
-        // 140, 160, 200
         switch(player.health.current){
             case 2:
                 hue.start = 240;
@@ -451,7 +444,7 @@ function ParticleSystem(){
         var color = {start: {h: 240,
                              s: 200,
                              b: 255},
-                     between: {h: random(180, 200), //random(310 - 30, 330 - 30),
+                     between: {h: random(180, 200),
                                s: 200,
                                b: 255},
                      end: {h: 200,
@@ -749,7 +742,6 @@ function jsonToP5(data){
         var types = ["rect", "ellipse", "line-centered", "triangle"];
         return types.indexOf(k) !== -1;
     };
-    // clog(keyToFns);
 
     var keys = Object.keys(data);
     var values = Object.values(data);
@@ -763,7 +755,6 @@ function jsonToP5(data){
         if(isValidFunction(k)){
             var fn = keyToFns[k];
             if(v instanceof Array){
-                // clog(fn, v);
                 fn.apply(null, v);
             } else{
                 fn(v);
@@ -889,7 +880,6 @@ function Particle({pos,
         if(fillColor) fill(colorMapWithBetween(fillColor));
 
         if(type === "rect"){
-            // {:rect []}
             rect(self.pos.x, self.pos.y, self.dim.x * s, self.dim.y * s);
         } else if(type === "ellipse") {
             ellipse(self.pos.x, self.pos.y, self.dim.x * s, self.dim.y * s);
@@ -910,8 +900,6 @@ function Particle({pos,
     }
 
     self.display = function(){
-
-        // line(self.pos.x, self.pos.y, pmouseX * s, pmouseY * s);
         if(type === "line"){
             drawLine();
         }else {
@@ -1030,20 +1018,7 @@ function Background(){
         }
 
         backgroundTriangles.forEach(t => {if(t) t.display();});
-        cells.forEach(c => {c.display();});
         triangles.forEach(t => {if(t) t.display();});
-    };
-
-    self.update = function(){
-        // spawnBackgroundCells();
-        // triangles.forEach(t => {t.update();});
-        cells.forEach(cell => {
-            cell.update();
-            if(AABBvsAABB(cell, {pos: player.pos.copy(),
-                                 dim: createVector(150, 150)})){
-                cell.applyForce(randomVector(-1, 1));
-            }
-        });
     };
 }
 
@@ -1060,8 +1035,6 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
     self.brightness = brightness;
     self.hue = hue || defaultHue();
     var shimmerOffset = random(10, 20);
-    // var hue = {green: 239, blue: 159};
-    // var lowerHealthHue = {red: 299, purple: 287};
 
     function defaultHue(){
         return chance(0.5) ? random(200, 239): random(159, 197);
