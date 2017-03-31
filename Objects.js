@@ -1049,6 +1049,8 @@ function Background(){
 
 function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
     var self = this;
+    const width = 30;
+    const height = 60;
     var right = PI/2;
     var left = -PI/2;
     var angle = chance(0.5) ? left: right;
@@ -1071,6 +1073,16 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
         return map(sin(shimmerOffset + offset + y + millis() * (0.0016 * scale)), -1, 1, min, max);
     }
 
+    function center(){
+        var offsetWidth = (width * scale) - (width * scale) / 2.9;
+        var offsetHeight = (height * scale) / 2;
+        if(angle === right){
+            return createVector(self.pos.x - offsetWidth, self.pos.y + offsetHeight);
+        } else {
+            return createVector(self.pos.x + offsetWidth, self.pos.y - offsetHeight);
+        }
+    }
+
     self.display = function(){
         push();
         colorMode(HSB, 360, 100, 100, 1);
@@ -1086,15 +1098,16 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
         // rgb 38 232 165
         // b 91 s 84
 
-        var alpha = map(player.pos.dist(self.pos), 200, 0, 0.01, shimmer(0.3, 0.5, 0.85, 50));
+        var alpha = map(player.pos.dist(center()), 200, 0, 0.01, shimmer(0.3, 0.5, 0.85, 50));
         fill(self.hue + shimmer(shimmerData.min, shimmerData.max), saturation, self.brightness, alpha);
+
         translate(x, y);
         var points = {x1: 0,
                       y1: 0,
-                      x2: 60 * scale,
+                      x2: height * scale,
                       y2: 0,
-                      x3: 30 * scale,
-                      y3: 60 * scale};
+                      x3: width * scale,
+                      y3: height * scale};
 
         rotate(angle);
         if(angle === left){
