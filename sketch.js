@@ -26,15 +26,6 @@ var gameNotStarted = true;
 var score = 0;
 var scoreParams = {killedEnemy: 1000, pickUp: 100, hitPickup: -400};
 
-var drawerParas = {randomWidth: 20,
-                   randomHeight: 20,
-                   rotateLeft: false,
-                   rotateUpLeft: false,
-                   rotateUpRight: false,
-                   width: 0,
-                   height: 0,
-                   offset: 0, balancedOffset: true};
-
 function Audio(){
     var self = this;
     var explosions = [];
@@ -109,14 +100,12 @@ function EnemyManager(bullets){
     };
 
     function explosiveForce(explodedEnemy, entity, _scale){
-        // ENHANMENT: have the distance affect the explosion force
         screenShake.setRange(-12, 12);
         var maxScale = _scale;
         var explosionRadius = 300;
         var distance = entity.pos.dist(explodedEnemy.pos);
 
         var scale = map(distance, 0, explosionRadius, maxScale, maxScale * 0.35);
-        // console.log(distance, scale);
         if(distance < explosionRadius){
             var center = rectCenter(entity);
             var target = center.sub(rectCenter(explodedEnemy)); // vector pointing away from enemy that exploded
@@ -128,7 +117,6 @@ function EnemyManager(bullets){
     }
 
     self.applyExplosiveForce = function(entity){
-        // explosion affecting all enemies
        enemies.forEach(function(e){
             e.applyForce(explosiveForce(entity, e, 150));
        });
@@ -138,10 +126,8 @@ function EnemyManager(bullets){
         bullets.forEach(function(b){
             if(AABBvsAABB(b, e)){
                 score+=scoreParams.killedEnemy;
-                // particleSystem.explosion(e.pos.copy());
                 gameAudio.playExplosion();
                 e.handleCollision("bullet");
-                // particleSystem.playerExhaust(20, b.pos, b.vel.copy().normalize().mult(-5));
                 player.applyForce(explosiveForce(e, player, 200));
                 b.kill();
                 self.applyExplosiveForce(e);
@@ -164,9 +150,7 @@ function EnemyManager(bullets){
                 e.init();
             }
             checkBulletCollision(e);
-            // wrapAroundScreen(e);
             e.update(dt, enemies);
-            // e.update(dt)
         });
     };
 
@@ -226,28 +210,14 @@ function setup(){
     init();
     textFont("Space Mono");
     particleSystem = new ParticleSystem();
-        // rectMode(CENTER);
     if(debug){
         var gui = new dat.GUI();
-        // gui.add(text, 'growthSpeed', -5, 5);
         gui.add(player, 'friction').min(0.9).max(1).step(0.005).listen();
         gui.add(player, 'maxDistance').min(100).max(300).step(1).listen();
         gui.add(player, 'reset');
         gui.add(player, 'holdToMove').listen();
     }
     gameAudio.backgroundLoop();
-    t = new Tri(0.5, 0.5, 250, 250, 2.0, 100, 100);
-    startScreenEntities.push(new Tri(random(1), 0.5, width/2, height/2, 2.0, 100, 100));
-    // var gui = new dat.GUI();
-    // gui.add(drawerParas, "offset").min(0).max(500);
-    // gui.add(drawerParas, "width").min(0).max(width).listen();
-    // gui.add(drawerParas, "height").min(0).max(height).listen();
-    // gui.add(drawerParas, "randomWidth").min(0).max(500);
-    // gui.add(drawerParas, "randomHeight").min(0).max(500);
-    // gui.add(drawerParas, "balancedOffset");
-    // gui.add(drawerParas, "rotateLeft");
-    // gui.add(drawerParas, "rotateUpLeft");
-    // gui.add(drawerParas, "rotateUpRight");
 }
 
 function EntityContainer(){
@@ -377,13 +347,6 @@ function PickupManger(){
         }
     }
     self.display = function(){
-        // var thirdWidth = (width/3);
-        // var thirdHeight = (height/3);
-        // line(thirdWidth, 0, thirdWidth, height);
-        // line(thirdWidth * 2, 0, thirdWidth * 2, height);
-
-        // line(0, thirdHeight, width, thirdHeight);
-        // line(0, thirdHeight * 2, width, thirdHeight * 2);
         pickups.forEach(function (p) {
             p.display();
         });
@@ -447,15 +410,6 @@ function draw(){
     // hueDebug();
     translate(screenShake.amount.x, screenShake.amount.y);
     // gameAudio.play();
-    // fill(0, 180);
-    // rect(0, 0, width, height);
-    var s = 2.0;
-    var points = {x1: 0,
-                  y1: 0,
-                  x2: 60 * s,
-                  y2: 0,
-                  x3: 30 * s,
-                  y3: 60 * s};
     debugText("mouse: ", mouseVector());
 
     // startScreenEntities.forEach(t => { t.display();});
