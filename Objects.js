@@ -1062,7 +1062,7 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
     // var lowerHealthHue = {red: 299, purple: 287};
 
     function defaultHue(){
-        return chance(0.5) ? 239 : 159;
+        return chance(0.5) ? random(200, 239): random(159, 197);
     }
 
     function shimmer(min, max, scale, offset){
