@@ -405,33 +405,30 @@ function ParticleSystem(){
         });
     };
 
-    self.pickUp = function (pos){
-        var color = {start: {h: 140,
+
+    self.playerHitPickup = function (pos){
+        var color = {start: {h: 200,
                              s: 200,
                              b: 255},
-                     between: {h: 160,
+                     between: {h: 250,
                                s: 200,
                                b: 255},
                      end: {h: 200,
-                           s: 100,
-                           b: 155}};
-        _.times(10,(i)=>{
-            var size = 20 + (i * (i * 0.3));
-            // size = max(size, 2);
-            var strokeW = (i * (i * 0.2));
-            strokeW = max(strokeW, 5);
-            var data = {lifeTime: 100,
-                        betweenLife: 70,
+                           s: 200,
+                           b: 255}};
+        _.times(10, () =>{
+            var data = {lifeTime: 190,
+                        betweenLife: 40,
                         pos: pos.copy(),
-                        vel: createVector(),
-                        dim: createVector(size, size),
+                        vel: randomVector(-5, 5),
+                        dim: createVector(10, 10),
                         type: "ellipse",
-                        friction: 0.88,
+                        // friction: 0.89,
                         pNoFill: true,
-                        pstrokeWeight: strokeW,
                         strokeColor: color,
-                        pscale: {min: 13.0, max: 0.3},
-                        alpha: {min: 220, max: 0}};
+                        pstrokeWeight: random(2, 8),
+                        pscale: {min: 4.1, max: 0.3},
+                        alpha: {min: 200, max:  50}};
             self.add(data);
         });
     };
@@ -525,34 +522,6 @@ function ParticleSystem(){
             particleSystem.add(data);
         });
     };
-
-    self.pickup = function (pos){
-        var color = {start: {h: 200,
-                             s: 200,
-                             b: 255},
-                     between: {h: 250,
-                               s: 200,
-                               b: 255},
-                     end: {h: 200,
-                           s: 200,
-                           b: 255}};
-        _.times(10, () =>{
-            var data = {lifeTime: 190,
-                        betweenLife: 40,
-                        pos: pos.copy(),
-                        vel: randomVector(-5, 5),
-                        dim: createVector(10, 10),
-                        type: "ellipse",
-                        // friction: 0.89,
-                        pNoFill: true,
-                        strokeColor: color,
-                        pstrokeWeight: random(2, 8),
-                        pscale: {min: 4.1, max: 0.3},
-                        alpha: {min: 200, max:  50}};
-            self.add(data);
-        });
-    };
-
     self.respawnExplosion = function(pos) {
         var sat = 100;
         var explosion = {start: {h: 200,
