@@ -242,7 +242,7 @@ function Player(x, y, bullets){
     this.friction = 0.99;
     this.holdToMove = false;
     var fillColor = color(255, 200);
-    var bulletSpeed = 12;
+    const bulletVelScale = 0.1;
 
 
     function hitMove(entity){
@@ -306,10 +306,8 @@ function Player(x, y, bullets){
     this.update = function(dt){
         particleSystem.health(this);
         if(!this.health.isZero()){
-            if(keyDirection()){
-                var bulletVel = keyDirection().mult(bulletSpeed);
-
-                this.shoot.fireFrom(this, bulletVel);
+            if(mouseIsPressed){
+                this.shoot.fireFrom(this, hitMove(this).mult(-bulletVelScale));
             }
             this.acc = hitMove(this);
         }
