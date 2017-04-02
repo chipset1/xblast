@@ -357,7 +357,7 @@ function ParticleSystem(){
                     vel: createVector(),
                     type: "ellipse",
                     pNoFill: true,
-                    pstrokeWeight: 5 + (i * i),
+                    pstrokeWeight: 5,
                     strokeColor: color,
                     pscale: {min: 12.1, max: 0.3},
                     alpha: {min: 200, max: 20}};
