@@ -454,56 +454,7 @@ function draw(){
 }
 
 function mousePressed(){
-    var explosion = {start: {h: random(255),
-                                s: 255,
-                                b: 0.5 * 255},
-                        between: {h: random(255),
-                                s: 0.2 * 255,
-                                b: 0.9 * 255},
-                        end: {h: 0,
-                            s: 0,
-                            b: 0}};
-    var hue = 0.5;
-    var s =  {start: {h: 240 + random(-5, 10),
-                        s: 200,
-                        b: 0.7 * 255},
-                between: {h: 220,
-                        s:200,
-                        b: 0.9 * 255},
-                end: {h: 240,
-                    s: 200,
-                    b: 200}};
-    // particleSystem.pickup(mouseVector());
-    _.times(1, i =>{
-        var data = {lifeTime: 50,
-                        betweenLife: 40,
-                        pos: mouseVector(),
-                        vel: randomVector(-10, 10),
-                        dim: createVector(10, 10),
-                        type: "rect",
-                        friction: 0.96,
-                        pNoStroke: true,
-                        // pNoFill: true,
-                        // pstrokeWeight: 10,
-                        fillColor: explosion,
-                        pscale: {min: 5.1, max: 10.3},
-                        alpha: {min: 200, max: 0}};
-        var data1 = {lifeTime: 50,
-                        betweenLife: 30,
-                        pos: mouseVector(), //.add(randomVector(-10, 10)),
-                        // vel: randomVector(-12, 12).add(mouseVector().sub(createVector(pmouseX, pmouseY)).normalize()),
-                        dim: createVector(5, 5),
-                        vel: createVector(),
-                        // friction: 0.98,
-                        type: "ellipse",
-                        // slowDownRatio: 0.3,
-                        pNoFill: true,
-                        pstrokeWeight: 5 + (i * i),
-                        strokeColor: s,
-                        pscale: {min: 12.1, max: 0.3},
-                        alpha: {min: 200, max: 20}};
-        particleSystem.add(data1);
-    });
+    particleSystem.mousePressed();
 }
 
 function mouseReleased(){

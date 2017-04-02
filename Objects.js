@@ -342,6 +342,30 @@ function ParticleSystem(){
         }
     };
 
+    self.mousePressed = function(){
+        var color =  {start: {h: 240 + random(-5, 10),
+                              s: 200,
+                              b: 0.7 * 255},
+                      between: {h: 220,
+                                s:200,
+                                b: 0.9 * 255},
+                      end: {h: 240,
+                            s: 200,
+                            b: 200}};
+        var data = {lifeTime: 50,
+                    betweenLife: 30,
+                    pos: mouseVector(),
+                    dim: createVector(5, 5),
+                    vel: createVector(),
+                    type: "ellipse",
+                    pNoFill: true,
+                    pstrokeWeight: 5 + (i * i),
+                    strokeColor: color,
+                    pscale: {min: 12.1, max: 0.3},
+                    alpha: {min: 200, max: 20}};
+        particleSystem.add(data);
+    };
+
     self.health = function(player){
         if(!healthTimer.canRun()) return;
         var hue = {start: 140};
