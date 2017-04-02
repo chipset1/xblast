@@ -84,7 +84,7 @@ function ShootComponent(interval, remaining, bullets){
 }
 
 function PickUp(pos){
-    this.pos = pos;//entity.pos.copy();
+    this.pos = pos;
     this.vel = createVector();
     this.dim = createVector(20, 20);
     var isDead = false;
@@ -99,8 +99,6 @@ function PickUp(pos){
     this.display = function(){
         push();
         noStroke();
-        // fill(38, 232, 165, 180)
-        // fill(78, 232, 165, 180)
         colorMode(HSB, 360, 100, 100, 1);
         fill(200, 98, 99, 0.3);
         ellipseMode(CORNER);
@@ -260,8 +258,6 @@ function Player(x, y, bullets){
             dir = mouse.sub(entity.pos);
             dir.mult(-1);
             dir.limit(self.maxDistance);
-            // stroke(255,0,0, 20);
-            // line(mouseX, mouseY, entity.pos.x + entity.dim.x / 2, entity.pos.y + entity.dim.y / 2);
         }
         return dir;
     }
@@ -285,25 +281,6 @@ function Player(x, y, bullets){
         this.friction = 0.99;
         this.maxDistance = 200;
     };
-
-    function bulletOutline(){
-        if(self.shoot.remainingBullets > 0 && self.health.current > 0){
-            var remainingBullets = self.shoot.remainingBullets;
-            var rectOffset = map(remainingBullets, 0, 10, 0, 50);
-            var strokeOffset = map(remainingBullets, 0, 10, 0.1, 3);
-            var alpha = cmap(remainingBullets, 0, 10, 0.8, 0.65);
-            push();
-            colorMode(HSB, 360, 100, 100, 1);
-            strokeWeight(5 + strokeOffset);
-            stroke(250, 80, 100, alpha);
-            noFill();
-            var bPos = self.pos.copy().sub(rectOffset/2, rectOffset/2);
-            var bDim = self.dim.copy().add(rectOffset, rectOffset);
-            ellipseMode(CORNER);
-            ellipse(bPos.x, bPos.y, bDim.x, bDim.y);
-            pop();
-        }
-    }
 
     this.display = function(){
         push();
@@ -423,7 +400,6 @@ function ParticleSystem(){
                         vel: randomVector(-5, 5),
                         dim: createVector(10, 10),
                         type: "ellipse",
-                        // friction: 0.89,
                         pNoFill: true,
                         strokeColor: color,
                         pstrokeWeight: random(2, 8),
@@ -477,15 +453,12 @@ function ParticleSystem(){
                         betweenLife: 40,
                         pos: pos.copy(),
                         vel: dir.copy().add(randomVector(-0.5, 0.5)).mult(6),
-                        // dim: createVector(10, 10),
                         type: "line",
-                        // friction: 0.99,
                         size: 0,
                         targetSize: 50,
                         pstrokeWeight: sw,
                         pNoFill: true,
                         strokeColor: color,
-                        // pscale: {min: 0.3, max: 3.3},
                         alpha: {min: 200, max: 20}};
             self.add(data);
         });
@@ -512,10 +485,7 @@ function ParticleSystem(){
                         dim: createVector(size, size),
                         type: "ellipse",
                         friction: 0.88,
-                        // pNoFill: true,
                         pNoStroke: true,
-                        // pstrokeWeight: (i * (i * 0.2)),
-                        // strokeColor: color,
                         fillColor: explosion,
                         pscale: {min: 1.0, max: 6.3},
                         alpha: {min: 255, max: 20}};
@@ -536,7 +506,6 @@ function ParticleSystem(){
         _.times(12, (i) => {
             var radius = 18;
             var vel = createVector(sin(i) * radius, cos(i) * radius);
-            // vel.add(randomVector(-5, 5));
             var data = {lifeTime: 140,
                         betweenLife: 60,
                         pos: pos.copy(),
@@ -545,8 +514,6 @@ function ParticleSystem(){
                         type: "rect",
                         friction: 0.91,
                         pNoStroke: true,
-                        // pNoFill: true,
-                        // pstrokeWeight: 10,
                         fillColor: explosion,
                         pscale: {min: 5.1, max: 20.3},
                         alpha: {min: 200, max: 0}};
@@ -573,7 +540,6 @@ function ParticleSystem(){
                               dim: createVector(10, 10),
                               type: "rect",
                               friction: 0.99,
-                              // pNoStroke: true,
                               pNoFill: true,
                               pstrokeWeight: 3,
                               strokeColor: explosion,
@@ -604,8 +570,6 @@ function ParticleSystem(){
                         type: "rect",
                         friction: 0.89,
                         pNoStroke: true,
-                        // pNoFill: true,
-                        // pstrokeWeight: 10,
                         fillColor: explosion,
                         pscale: {min: 5.1, max: 15.3},
                         alpha: {min: 200, max: 0}};
