@@ -267,10 +267,6 @@ function Player(x, y, bullets){
     };
 
     this.mouseReleased = function(){
-        particleSystem.playerExhaust(createVector(self.pos.x + self.dim.x / 2,
-                                                  self.pos.y + self.dim.y / 2),
-                                     this.acc.copy().mult(-1));
-
         if(!this.holdToMove){
             this.vel.add(this.acc);
         }
