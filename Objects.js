@@ -110,7 +110,7 @@ function Enemy(){
     self.alpha = 5;
     var minAlpha = 0;
     var maxAlpha = 200;
-    var maxDistance = 350;
+    var maxAlphaDistance = 450;
 
     function initL(){
         resetDim();
@@ -173,7 +173,7 @@ function Enemy(){
     };
 
     function updateAlpha(){
-        return cmap(player.pos.dist(self.pos), maxDistance, 0, minAlpha, maxAlpha);
+        return cmap(player.pos.dist(self.pos), maxAlphaDistance, 0, minAlpha, maxAlpha);
     }
 
     this.display = function(){
