@@ -74,7 +74,6 @@ function ShootComponent(interval, bullets){
     this.fireFrom = function(entity, vel){
         if(timer.canRun()){
             this.shotSound();
-            this.remainingBullets--;
             var v = ifNull(vel, createVector(-5, 0));
             this.bullets.push(new Bullet(entity.pos.copy(), "normal", "blue", v));
             screenShake.setRange(-1.2, 1.2);
