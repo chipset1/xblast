@@ -370,7 +370,6 @@ function PickupManger(){
                 totalSpawnedCount++;
                 gameAudio.playPickupEffect();
                 particleSystem.playerHitPickup(player.pos.copy());
-                player.shoot.remainingBullets +=1;
                 player.health.add(1);
                 arrayRemove(pickups, i);
                 score += scoreParams.pickUp;

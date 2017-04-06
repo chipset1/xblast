@@ -65,12 +65,6 @@ function ShootComponent(interval, bullets){
 
     this.shotSound = function(){};
 
-    this.addToRemaining = function(value){
-        if(this.remainingBullets < max){
-            this.remainingBullets += value;
-        }
-    };
-
     this.fireFrom = function(entity, vel){
         if(timer.canRun()){
             this.shotSound();
