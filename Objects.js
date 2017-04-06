@@ -52,7 +52,7 @@ function Bullet(pos, type, color, vel){
 }
 
 
-function ShootComponent(interval, remaining, bullets){
+function ShootComponent(interval, bullets){
     // shooting behavior
     // updating of bullets in done out side of the entity this is used in to prevent removing all the
     // bullets when the entity is killed and removed
@@ -61,7 +61,6 @@ function ShootComponent(interval, remaining, bullets){
     this.interval = ifNull(interval, 200);
     this.blockInterval = 600;
     var max = 1000; // maximum number of bullets
-    this.remainingBullets = remaining; // how many bullets are left to shoot
     var timer = new Timer(this.interval);
 
     this.shotSound = function(){};
@@ -73,7 +72,7 @@ function ShootComponent(interval, remaining, bullets){
     };
 
     this.fireFrom = function(entity, vel){
-        if(timer.canRun() && this.remainingBullets > 0){
+        if(timer.canRun()){
             this.shotSound();
             this.remainingBullets--;
             var v = ifNull(vel, createVector(-5, 0));
@@ -235,7 +234,7 @@ function Player(x, y, bullets){
     this.vel = createVector(0, 0);
     this.acc = createVector();
     this.dim = createVector(15, 15);
-    this.shoot = new ShootComponent(300, 1, bullets);
+    this.shoot = new ShootComponent(300, bullets);
     this.shoot.shotSound = gameAudio.playBulletShot;
     this.health = new HealthComponent(3);
     this.maxDistance = 200;

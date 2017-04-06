@@ -430,7 +430,6 @@ function draw(){
     textSize(32);
     fill(255);
     text("score:" + score, (width/2) - 80, 60);
-    text("bullets:" + player.shoot.remainingBullets, (width/2) - 80, height - 40);
     pop();
     screenShake.update();
     particleSystem.display();
