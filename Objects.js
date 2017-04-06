@@ -863,8 +863,7 @@ function Timer(timerInterval, numberOfCycles) {
 
     this.canRun = function() {
         var curr = (usesFrames) ? frameCount : millis();
-        if(lastInterval < 0) lastInterval = curr;
-        if(curr-lastInterval >= interval) {
+        if(curr-lastInterval >= interval || lastInterval < 0) {
             lastInterval = curr;
             if(numCycles > 0 && ++cycleCounter >= numCycles) stop();
             return true;
