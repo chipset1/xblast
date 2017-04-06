@@ -236,14 +236,13 @@ function Player(x, y, bullets){
     this.shoot = new ShootComponent(300, bullets);
     this.shoot.shotSound = gameAudio.playBulletShot;
     this.health = new HealthComponent(3);
-    this.maxDistance = 200;
+    this.maxDistance = 400;
     this.friction = 0.99;
     this.holdToMove = false;
     var fillColor = color(255, 200);
-    const bulletVelScale = 0.1;
 
 
-    function hitMove(entity){
+    function hitMove(entity, dirScale){
         // todo: find better name for this
         // update the velocity of the entity based on
         // where the mouse shoots it
@@ -255,6 +254,7 @@ function Player(x, y, bullets){
         if(mouseIsPressed){
             dir = mouse.sub(entity.pos);
             dir.mult(-1);
+            dir.mult(dirScale);
             dir.limit(self.maxDistance);
         }
         return dir;
@@ -273,7 +273,7 @@ function Player(x, y, bullets){
 
     this.reset = function(){
         this.friction = 0.99;
-        this.maxDistance = 200;
+        // this.maxDistance = 200;
     };
 
     this.display = function(){
@@ -298,12 +298,14 @@ function Player(x, y, bullets){
     };
 
     this.update = function(dt){
+        const accScale = 1.7;
+        const bulletScale = -0.04;
         particleSystem.health(this);
         if(!this.health.isZero()){
             if(mouseIsPressed){
-                this.shoot.fireFrom(this, hitMove(this).mult(-bulletVelScale));
+                this.shoot.fireFrom(this, hitMove(this, bulletScale));
             }
-            this.acc = hitMove(this);
+                this.acc = hitMove(this, accScale);
         }
         if(this.holdToMove){
             this.acc = hitMove(this);
