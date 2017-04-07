@@ -18,12 +18,10 @@ function ScreenShake(){
     };
 }
 
-function Bullet(pos, type, color, vel){
+function Bullet(pos, vel, velLimit){
     this.pos = pos;
     this.vel = ifNull(vel, createVector(-5, 0));
     this.dim = createVector(20, 20);
-    this.type = type;
-    this.color = color;
     var isDead = false;
     this.init = function(posX, posY, vel){
         this.pos.x = posX;
@@ -42,6 +40,7 @@ function Bullet(pos, type, color, vel){
             this.kill();
         }
         particleSystem.fromBullet(this);
+        this.vel.limit(velLimit);
         this.pos.add(this.vel.copy(dt));
     };
     this.display = function(){
@@ -65,11 +64,11 @@ function ShootComponent(interval, bullets){
 
     this.shotSound = function(){};
 
-    this.fireFrom = function(entity, vel){
+    this.fireFrom = function(entity, vel, velLimit){
         if(timer.canRun()){
             this.shotSound();
             var v = ifNull(vel, createVector(-5, 0));
-            this.bullets.push(new Bullet(entity.pos.copy(), "normal", "blue", v));
+            this.bullets.push(new Bullet(entity.pos.copy(), v, velLimit));
             screenShake.setRange(-1.2, 1.2);
         }
     };
@@ -293,11 +292,12 @@ function Player(x, y, bullets){
 
     this.update = function(dt){
         const accScale = 1.7;
-        const bulletScale = -0.04;
+        const bulletScale = -0.08;
+        const bulletVelLimit = 12;
         particleSystem.health(this);
         if(!this.health.isZero()){
             if(mouseIsPressed){
-                this.shoot.fireFrom(this, hitMove(this, bulletScale));
+                this.shoot.fireFrom(this, hitMove(this, bulletScale), bulletVelLimit);
             }
                 this.acc = hitMove(this, accScale);
         }
