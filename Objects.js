@@ -887,85 +887,159 @@ function Timer(timerInterval, numberOfCycles) {
 
 function Background(){
     var self = this;
-    var cells = [];
+    self.maxCount = 450;
+    self.count = self.maxCount;
+
+    const maxDistance = 200;
+    const minAlpha = 0.25;
+    const maxAlpha = 0.4;
+
+    self.toNormalTransition = new Transition(3000);
+    self.toLowHealthTransition = new Transition(3000);
+
     var triangles = newTriangles();
-    var backgroundTriangles = map2D(80, (x, y) =>{
+    var bigTriangles = map2D(80, (x, y) =>{
         return defaultTri(x, y, {scale: 4.3, brightness: 32, saturation: 43});
     });
-
-    var timer = new Timer(100);
-    var temp = [];
-    var index = 0;
-    this.maxCount = 300;
-    this.count = this.maxCount;
 
     function defaultTri(x, y, customArgs){
         return new Tri(x, y, _.merge({scale: 2.5,
                                       hue: 239,
-                                      saturation: 100,
+                                      saturation: random(50, 100),
                                       brightness: 100,
                                       shimmerData: {min: -17,
                                                     max: 10}},
                                      customArgs));
     }
 
+
     function newTriangles(){
-        var big = map2D(60, (x, y) => {
+        var tris1 = map2D(60, (x, y) => {
             if((x > 100 && x < 340) || (x > 600 && x < 850)){
                 if(chance(0.5)){
                     return defaultTri(x, y);
                 } else {
-                    return new defaultTri(x, y,
-                                          {hue: 159,
-                                           shimmerData: {min: 0,
-                                                         max: 30}});
+                    return defaultTri(x, y,
+                                      {hue: 159,
+                                       shimmerData: {min: 0,
+                                                     max: 30}});
                 }
             }
         });
-        var small = map2D(160, (x, y) =>{
+        var tris2 = map2D(160, (x, y) =>{
             if((y > 100 && y < 340) || (y > 400 && y < 650)){
-                return new defaultTri(x, y, {scale: 2.2, brightness: 83});
+                // return defaultTri(x, y, {scale: 3.2, brightness: 83});
+                if(chance(0.5)){
+                    return defaultTri(x, y, {scale: 2.2, brightness: 83});
+                } else {
+                    return defaultTri(x, y,
+                                      {hue: 159,
+                                       scale: 2.2,
+                                       brightness: 83,
+                                       shimmerData: {min: 0,
+                                                     max: 30}});
+                }
             }
         });
-        return _.concat(big, small); // _.concat(big, small);
+        return _.concat(tris1, tris2); // _.concat(big, small);
     }
 
     function map2D(step, fn){
-        return _.flattenDeep(_.map(_.range(-step, width + step, step), x =>{
-            return _.map(_.range(-step, height + step, step), y => {
-                return fn(x, y);
-            });
-        }));
+        var results = [];
+        for(var x = -step; x < width + step; x+=step) {
+            for(var y = -step; y < height; y+=step) {
+                var r = fn(x, y);
+                if(r) results.push(r);
+            }
+        }
+        return results;
     }
 
-    function spawnBackgroundCells(){
-        // TODO change how your doing this
-        if(index < temp.length && timer.canRun()){
-            cells.push(temp[index]);
-            index++;
+    function shimmer(pos, min, max, scale, offset){
+        return map(sin(offset + pos.y + millis() * (0.0016 * 0.85)), -1, 1, min, max);
+    }
+
+    function nextAlpha(tri){
+        return map(player.pos.dist(tri.center()), maxDistance, 0, 0, shimmer(tri.pos, minAlpha, maxAlpha, 0.85, 50));
+    }
+
+    function mapCount(min, max){
+        return map(self.count, self.maxCount, 0, min, max);
+    }
+
+    self.transitionToNormal = function(){
+        self.toNormalTransition.start();
+    };
+
+    self.transitionToLowHealth = function(){
+        self.toLowHealthTransition.start();
+    };
+
+    function lowHealth(){
+        // change background tri colors when to player is low health and
+        // back to its normal state. isTranstionToNormal is set when the player
+        // collides with a pickup
+        var all = _.concat(bigTriangles, triangles);
+        const hue = 320;
+        const alpha = 0.2;
+        const saturation = 70;
+        const brightness = 100;
+        if(player.health.equals(1) || player.health.equals(0)){
+            all.map(function(tri, i){
+                tri.hue = hue;
+                tri.alpha = alpha;
+                tri.saturation = saturation;
+                tri.brightness = brightness;
+            });
+        }
+        if(self.toLowHealthTransition.isRunning()){
+            all.forEach(tri =>{
+                var mapTransition = self.toLowHealthTransition.map;
+                tri.alpha = mapTransition(nextAlpha(tri), alpha);
+                tri.hue = mapTransition(tri.initialHue, hue);
+                tri.saturation = mapTransition(tri.initialSaturation, saturation);
+                tri.brightness = mapTransition(tri.initialBrightness, brightness);
+            });
+        }
+        if(self.toNormalTransition.isRunning()){
+            all.forEach(tri =>{
+                var mapTransition = self.toNormalTransition.map;
+                tri.alpha = mapTransition(alpha, nextAlpha(tri));
+                tri.hue = mapTransition(hue, int(tri.initialHue));
+                tri.saturation = mapTransition(saturation, tri.initialSaturation);
+                tri.brightness = mapTransition(brightness, tri.initialBrightness);
+            });
+        }
+    }
+
+    function whiteOut(){
+        if(whiteOutMode){
+            var fillColor = mapCount(255, 0);
+            bigTriangles.forEach(tri => {
+                tri.brightness = mapCount(100, tri.initialBrightness);
+            });
+
+            triangles.forEach(tri => {
+                tri.alpha = mapCount(0.6, nextAlpha(tri));
+                tri.saturation = mapCount(0, tri.initialSaturation) + mapCount(random(4.0), 0);
+            });
+            fill(fillColor, 120);
+            rect(0, 0, width, height);
+            self.count--;
+        }
+        if(self.count <= 0) {
+            whiteOutMode = false;
+            self.count = self.maxCount;
         }
     }
 
     self.display = function(){
-        if(whiteOutMode){
-            var fillColor = cmap(this.count, this.maxCount, 0, 255, 0);
-            backgroundTriangles.forEach(tri => {
-                if(tri){
-                    var bri = cmap(this.count, this.maxCount, 0, 100, tri.minBrightness);
-                    tri.brightness = bri;
-                }
-            });
-            fill(fillColor);
-            rect(0, 0, width, height);
-            this.count--;
-        }
-        if(this.count <= 0) {
-            whiteOutMode = false;
-            this.count = this.maxCount;
-        }
-
-        backgroundTriangles.forEach(t => {if(t) t.display();});
-        triangles.forEach(t => {if(t) t.display();});
+        // update alphas here
+        var all = _.concat(bigTriangles, triangles);
+        all.forEach(tri => {tri.alpha = nextAlpha(tri);});
+        whiteOut();
+        lowHealth();
+        all.forEach(t => {t.display();});
     };
 }
 
@@ -973,27 +1047,25 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
     var self = this;
     const width = 30;
     const height = 60;
-    var right = PI/2;
-    var left = -PI/2;
-    var angle = chance(0.5) ? left: right;
+    const right = PI/2;
+    const left = -PI/2;
+    const angle = chance(0.5) ? left: right;
 
     self.pos = createVector(x, y);
-    self.minBrightness = brightness;
+    self.initialBrightness = brightness;
     self.brightness = brightness;
-    self.hue = hue || defaultHue();
-    var shimmerOffset = random(10, 20);
 
-    function defaultHue(){
-        return chance(0.5) ? random(200, 239): random(159, 197);
+    self.initialSaturation = saturation;
+    self.saturation = saturation;
+    self.hue = hue;
+    self.initialHue = hue;
+    self.alpha = 0;
+
+    function shimmer(min, max){
+        return map(sin(y + millis() * 0.0016), -1, 1, min, max);
     }
 
-    function shimmer(min, max, scale, offset){
-        offset = offset || 1;
-        scale = scale || 1;
-        return map(sin(shimmerOffset + offset + y + millis() * (0.0016 * scale)), -1, 1, min, max);
-    }
-
-    function center(){
+    self.center = function(){
         var offsetWidth = (width * scale) - (width * scale) / 2.9;
         var offsetHeight = (height * scale) / 2;
         if(angle === right){
@@ -1001,13 +1073,20 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
         } else {
             return createVector(self.pos.x + offsetWidth, self.pos.y - offsetHeight);
         }
+    };
+
+    function mapSin(value, min, max){
+        return map(sin(value), -1, 1, min, max);
     }
 
-    self.display = function(){
+    function seconds(){
+        return millis()/1000;
+    }
+
+    self.display = function(alpha){
         push();
         colorMode(HSB, 360, 100, 100, 1);
         noStroke();
-
 
         // hsb 239 68 59
         // rgb 48 50 150
@@ -1018,21 +1097,46 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
         // rgb 38 232 165
         // b 91 s 84
 
-        var alpha = map(player.pos.dist(center()), 200, 0, 0.01, shimmer(0.3, 0.5, 0.85, 50));
-        fill(self.hue + shimmer(shimmerData.min, shimmerData.max), saturation, self.brightness, alpha);
+        fill(self.hue + shimmer(shimmerData.min, shimmerData.max), self.saturation, self.brightness, self.alpha);
 
-        translate(x, y);
+        var a = map(scale, 2.2, 4.3, 1, 5);
+        var multScale = mapSin(y + cos(tan(3 * x)) + (seconds() / a), 1, 1.3);
+        var offsetX = mapSin((y * x) + seconds(), 0, 10);
+        var offsetY = mapSin((y / x) + seconds() / a, 0, 10);
+
         var points = {x1: 0,
                       y1: 0,
-                      x2: height * scale,
+                      x2: height * scale * multScale,
                       y2: 0,
-                      x3: width * scale,
-                      y3: height * scale};
+                      x3: width * scale * multScale,
+                      y3: height * scale * multScale};
 
         const shakeScale = 0.9;
         translate(x + offsetX - (screenShake.amount.x * shakeScale), y + offsetY - (screenShake.amount.y * shakeScale));
         rotate(angle);
         triangle(points.x1, points.y1, points.x2, points.y2, points.x3, points.y3);
         pop();
+    };
+}
+
+function Transition(length){
+    var hasStarted = false;
+    var startTime = 0;
+
+    this.start = function(){
+        startTime = millis();
+        hasStarted = true;
+    };
+
+    this.map = function(min, max){
+        return map(millis(), startTime, startTime + length, min, max);
+    };
+
+    this.isRunning = function(){
+        // come up with a better function name
+        if(millis() > startTime + length){
+            hasStarted = false;
+        }
+        return hasStarted;
     };
 }

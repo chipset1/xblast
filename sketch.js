@@ -140,6 +140,9 @@ function EnemyManager(bullets){
 
         enemies.forEach(function(e){
             if(AABBvsAABB(player, e)){
+                if(player.health.equals(2)){
+                    gameBackground.transitionToLowHealth();
+                }
                 gameAudio.playExplosion();
                 whiteOutMode = true;
                 e.handleCollision("player");
@@ -367,6 +370,10 @@ function PickupManger(){
         for(var i = 0; i<pickups.length; i++){
             var p = pickups[i];
             if(AABBvsAABB(player, p) && !player.health.isZero()){
+                if(player.health.equals(1)){
+                    gameBackground.transitionToNormal();
+                }
+
                 totalSpawnedCount++;
                 gameAudio.playPickupEffect();
                 particleSystem.playerHitPickup(player.pos.copy());
@@ -445,6 +452,7 @@ function draw(){
         endScreen();
         // whiteOutMode=false;
         if(keyIsPressed && key === " "){
+            gameBackground.transitionToNormal();
             particleSystem.respawnExplosion(RESPAWN_POSITION);
             init();
         }
