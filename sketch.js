@@ -253,11 +253,11 @@ function EntityContainer(){
 }
 
 function PickupManger(){
+    var self = this;
     var pickups = [];
     var pickupTimer = new Timer(1000);
-    var self = this;
     var totalSpawnedCount = 0;
-    var diagonalSpawnCount = 0;
+    var diagonalSpawnedCount = 0;
 
     // RULE OF THIRDS
     var thirdWidth = (width/3);
@@ -301,7 +301,7 @@ function PickupManger(){
 
     function diagonlSpawn(){
         // player in top left or bottom right corner spawn diagonalForward
-        diagonalSpawnCount++;
+        diagonalSpawnedCount++;
         if((player.pos.x < width/2 && player.pos.y < height/2) ||
            (player.pos.x > width/2 && player.pos.y > height/2 )){
             return diagonalForward[nextIndex()];
@@ -336,7 +336,7 @@ function PickupManger(){
                 // pickups are spawner more in the dialog positions since
                 // this is the farest distance between pickups
                 // making it more deficult to dodge enemies
-                if(diagonalSpawnCount < 4 || diagonalSpawnCount % 6 === 0){
+                if(diagonalSpawnedCount < 4 || diagonalSpawnedCount % 6 === 0){
                     pos = diagonlSpawn();
                 } else {
                     pos = horizontalSpawn();
