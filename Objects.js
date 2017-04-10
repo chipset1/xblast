@@ -214,6 +214,11 @@ function HealthComponent(maxHealth){
             this.current -= value;
         }
     };
+
+    this.equals = function(value){
+        return this.current === value;
+    };
+
     function underMax(){
         return self.current < self.max;
     }
