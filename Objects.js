@@ -1022,12 +1022,10 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
                       x3: width * scale,
                       y3: height * scale};
 
+        const shakeScale = 0.9;
+        translate(x + offsetX - (screenShake.amount.x * shakeScale), y + offsetY - (screenShake.amount.y * shakeScale));
         rotate(angle);
-        if(angle === left){
-            triangle(points.x1, points.x1, points.x2, points.y2, points.x3, points.y3);
-        } else {
-            triangle(points.x1, points.y1, points.x2, points.y2, points.x3, points.y3);
-        }
+        triangle(points.x1, points.y1, points.x2, points.y2, points.x3, points.y3);
         pop();
     };
 }
