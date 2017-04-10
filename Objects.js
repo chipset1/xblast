@@ -109,7 +109,10 @@ function Enemy(){
     self.alpha = 5;
     var minAlpha = 0;
     var maxAlpha = 200;
-    var maxAlphaDistance = 450;
+    var maxAlphaDistance = 400;
+    var fillColor = 255;
+    var alpha = 100;
+
 
     function initL(){
         resetDim();
@@ -178,13 +181,12 @@ function Enemy(){
     this.display = function(){
         push();
         noStroke();
+        alpha = updateAlpha();
         if(whiteOutMode){
-            var a = map(gameBackground.count, gameBackground.maxCount, 0, maxAlpha, minAlpha);
-            a = max(a, updateAlpha());
-            fill(255, a);
-        } else {
-            fill(255, updateAlpha());
+            alpha = map(gameBackground.count, gameBackground.maxCount, 0, maxAlpha, minAlpha);
+            alpha = max(alpha, updateAlpha());
         }
+        fill(fillColor, alpha);
         rect(self.pos.x, self.pos.y, self.dim.x, self.dim.y);
         pop();
     };
