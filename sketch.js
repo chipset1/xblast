@@ -137,7 +137,6 @@ function EnemyManager(bullets){
     }
 
     self.update = function(dt){
-
         enemies.forEach(function(e){
             if(AABBvsAABB(player, e)){
                 if(player.health.equals(2)){
@@ -201,7 +200,6 @@ function startScreen(){
     pop();
 }
 
-
 function setup(){
     // 3 : 2 aspect ratio
     var canvas = createCanvas(1200, 800);
@@ -212,6 +210,7 @@ function setup(){
     init();
     textFont("Space Mono");
     particleSystem = new ParticleSystem();
+
     if(debug){
         var gui = new dat.GUI();
         gui.add(player, 'friction').min(0.9).max(1).step(0.005).listen();
@@ -405,19 +404,16 @@ function update(dt){
 
 function draw(){
     background(0);
-    stroke(255, 120);
-    noFill();
-    rect(0, 0, width - 1, height - 1);
-    gameBackground.display();
-    debugText("frameRate", int(frameRate()));
-    // hueDebug();
-    translate(screenShake.amount.x, screenShake.amount.y);
-    // gameAudio.play();
-    debugText("mouse: ", mouseVector());
 
-    // startScreenEntities.forEach(t => { t.display();});
+    gameBackground.display();
+    stroke(255, 120);
+    debugText("frameRate", int(frameRate()));
+    translate(screenShake.amount.x, screenShake.amount.y);
+    stroke(255, 100);
+    noFill();
+    rect(0, 0, width-1, height-1);
+
     if(gameNotStarted){
-        // startScreen();
         if(key === " "){
             gameNotStarted=false;
             // setImageVisible("controlsGif", false);
@@ -445,12 +441,8 @@ function draw(){
     });
     enemyManager.display();
     pickupManger.display();
-
-    //     e.display();
-    // });
     if(player.health.isZero()){
         endScreen();
-        // whiteOutMode=false;
         if(keyIsPressed && key === " "){
             gameBackground.transitionToNormal();
             particleSystem.respawnExplosion(RESPAWN_POSITION);
