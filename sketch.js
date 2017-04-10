@@ -390,11 +390,7 @@ function update(dt){
     particleSystem.update(dt);
     enemyManager.update(dt);
     pickupManger.update();
-
-    var pickups = pickupManger.getPickups();
-
     bullets.forEach(function(b){
-        b.display();
         b.update(dt);
     });
     removeIfdead(bullets);
