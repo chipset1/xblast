@@ -98,14 +98,12 @@ function PickUp(pos){
     };
 }
 
-var initLeft = true;
+
 function Enemy(){
     var self = this;
     const sizeMin = 30;
     const sizeMax = 100;
     self.acc = createVector();
-    self.init = init;
-    init();
     self.alpha = 5;
     var minAlpha = 0;
     var maxAlpha = 200;
@@ -113,43 +111,34 @@ function Enemy(){
     var fillColor = 255;
     var alpha = 100;
 
-
-    function initL(){
+    self.initL = function(){
         resetDim();
         var posL = createVector(width + random(200, 500), random(self.dim.x, height - self.dim.y));
         var velL = createVector(-6 * 30, 0);
+        self.externalForce = createVector();
         self.pos = posL;
         self.vel = velL;
-    }
+    };
 
-    function initR(){
+    self.initR = function(){
         resetDim();
         var posR = createVector(0 - random(200, 500), random(self.dim.x, height - self.dim.y));
-
         var velR = createVector(6 * 30, 0);
+        self.externalForce = createVector();
         self.pos = posR;
         self.vel = velR;
-    }
-
-    function init(){
-        if(initLeft){
-            initL();
-        } else {
-            initR();
-        }
-        initLeft = !initLeft;
-    }
+    };
 
     function reInitialize(){
         // if its moving left and is past the left side of the screen
         // set the position to off the right side of the screen and randomize the y
         if(self.vel.x <0 && self.pos.x + self.dim.x < 0){
-            initL();
+            self.initL();
         }
         // if its moving right and is past the right side of the screen
         // set the position to off the left side of the screen and randomize the y
         if(self.vel.x > 0 && self.pos.x > width){
-            initR();
+            self.initR();
         }
     }
 
