@@ -33,10 +33,10 @@ function Audio(){
     var explosionIndex = 0;
     var pickupEffect;
     var pickupExplosion;
-    var shot;
+    var baseShot;
+    var toneShots;
 
-    function loadAudio(){
-    }
+    const toneShotsCount = 5;
 
     self.preload = function(){
         pickupEffect = loadSound("assets/audio/pickupEffect.wav");
@@ -44,7 +44,10 @@ function Audio(){
         explosions.push(loadSound("assets/audio/explosion.wav"));
         explosions.push(loadSound("assets/audio/explosion2.wav"));
         background = loadSound("assets/audio/background.wav");
-        shot = loadSound("assets/audio/shot.wav");
+        baseShot = loadSound("assets/audio/shot.wav");
+        toneShots = _.range(0, toneShotsCount+1).map(num => {
+            return loadSound("assets/audio/toneShots/" + num + ".wav");
+        });
     };
 
     self.playPickupExplosion = function(){
@@ -53,15 +56,15 @@ function Audio(){
     };
 
     self.playPickupEffect = function(){
-        // pickupEffect.rate(random(1.0, 1.2))
         pickupEffect.setVolume(0.2);
         pickupEffect.play();
     };
+
     self.playBulletShot = function(){
-        // explosion.rate(2.0);
-        // shot.setVolume(0.01);
-        // shot.rate(random(1.0, 1.05));
-        shot.play();
+        var index = int(random(0, 6));
+        var toneShot = toneShots[index];
+        baseShot.play();
+        toneShot.play();
     };
 
     self.backgroundLoop = function(){
