@@ -171,7 +171,7 @@ function Enemy(){
         push();
         noStroke();
         alpha = updateAlpha();
-        if(whiteOutMode){
+        if(gameBackground.inWhiteOutMode()){
             alpha = map(gameBackground.count, gameBackground.maxCount, 0, maxAlpha, minAlpha);
             alpha = max(alpha, updateAlpha());
         }
@@ -882,14 +882,17 @@ function Background(){
     const maxDistance = 200;
     const minAlpha = 0.25;
     const maxAlpha = 0.4;
+    var whiteOutMode = false;
 
-    self.toNormalTransition = new Transition(3000);
+    self.toNormalTransition = new Transition(2000);
     self.toLowHealthTransition = new Transition(3000);
+    var toStartTransition = new Transition(2000);
 
     var triangles = newTriangles();
     var bigTriangles = map2D(80, (x, y) =>{
         return defaultTri(x, y, {scale: 4.3, brightness: 32, saturation: 43});
     });
+    var all = _.concat(bigTriangles, triangles);
 
     function defaultTri(x, y, customArgs){
         return new Tri(x, y, _.merge({scale: 2.5,
@@ -930,7 +933,7 @@ function Background(){
                 }
             }
         });
-        return _.concat(tris1, tris2); // _.concat(big, small);
+        return _.concat(tris1, tris2);
     }
 
     function map2D(step, fn){
@@ -964,11 +967,15 @@ function Background(){
         self.toLowHealthTransition.start();
     };
 
+    self.transitionToStart = function(){
+        toStartTransition.start();
+    };
+
     function lowHealth(){
         // change background tri colors when to player is low health and
         // back to its normal state. isTranstionToNormal is set when the player
         // collides with a pickup
-        var all = _.concat(bigTriangles, triangles);
+
         const hue = 320;
         const alpha = 0.2;
         const saturation = 70;
@@ -1001,6 +1008,19 @@ function Background(){
         }
     }
 
+    self.endWhiteOut = function(){
+        whiteOutMode = false;
+        self.count = self.maxCount;
+    };
+
+    self.inWhiteOutMode = function(){
+        return whiteOutMode;
+    };
+
+    self.activateWhiteOutMode = function(){
+        whiteOutMode = true;
+    };
+
     function whiteOut(){
         if(whiteOutMode){
             var fillColor = mapCount(255, 0);
@@ -1009,25 +1029,33 @@ function Background(){
             });
 
             triangles.forEach(tri => {
-                tri.alpha = mapCount(0.6, nextAlpha(tri));
-                tri.saturation = mapCount(0, tri.initialSaturation) + mapCount(random(4.0), 0);
+                tri.alpha = mapCount(maxAlpha, nextAlpha(tri));
+                // tri.saturation = mapCount(200, tri.initialSaturation) + mapCount(random(10.0), 0);
             });
-            fill(fillColor, 120);
+            fill(fillColor, 130);
             rect(0, 0, width, height);
             self.count--;
         }
         if(self.count <= 0) {
-            whiteOutMode = false;
-            self.count = self.maxCount;
+            self.endWhiteOut();
         }
     }
 
     self.display = function(){
-        // update alphas here
-        var all = _.concat(bigTriangles, triangles);
         all.forEach(tri => {tri.alpha = nextAlpha(tri);});
         whiteOut();
         lowHealth();
+        if(gameNotStarted) {
+            all.forEach(tri =>{
+                tri.alpha = lerp(nextAlpha(tri), 1.0, 0.35);
+            });
+        }
+        if(toStartTransition.isRunning()) {
+            all.forEach(tri =>{
+                var alpha = lerp(nextAlpha(tri), 1.0, 0.3);
+                tri.alpha = toStartTransition.map(alpha, nextAlpha(tri));
+            });
+        }
         all.forEach(t => {t.display();});
     };
 }
@@ -1072,7 +1100,7 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
         return millis()/1000;
     }
 
-    self.display = function(alpha){
+    self.display = function(){
         push();
         colorMode(HSB, 360, 100, 100, 1);
         noStroke();

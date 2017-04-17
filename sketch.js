@@ -4,7 +4,6 @@
 // When its done i will put it up on github
 
 var debugText = textStackFn(20, 40, 20);
-var whiteOutMode = false;
 
 var gameBackground;
 var particleSystem;
