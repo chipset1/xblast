@@ -92,7 +92,12 @@ function PickUp(pos){
         push();
         noStroke();
         colorMode(HSB, 360, 100, 100, 1);
-        fill(200, 98, 99, 0.3);
+        var distance = player.pos.dist(this.pos);
+        var alpha = map(distance, 200, 0, 0.3, 1.0);
+
+        alpha = max(alpha, 0.3);
+        fill(200, 98, 99, alpha);
+
         ellipseMode(CORNER);
         ellipse(this.pos.x, this.pos.y, this.dim.x, this.dim.y);
         pop();
