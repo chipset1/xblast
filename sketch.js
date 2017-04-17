@@ -382,7 +382,6 @@ function PickupManger(){
             pickups.forEach(function (p){
                 if(AABBvsAABB(b, p)){
                     totalSpawnedCount++;
-                    score += scoreParams.hitPickup;
                     gameAudio.playPickupExplosion();
                     enemyManager.applyExplosiveForce(p);
                     p.kill();
