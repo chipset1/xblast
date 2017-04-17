@@ -158,17 +158,6 @@ function wrapAroundCamera(sprite, camera){
     }
 }
 
-function ifNull(variable, returnVar){
-    // check if the variable is null should
-    // also cover the case if the varible is also undefined
-    // nope its doesn T_T"
-    if(variable === null || variable === undefined){
-        return returnVar;
-    } else {
-        return variable;
-    }
-}
-
 function endlessCount(){
     var num = 0;
     return function(){

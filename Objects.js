@@ -20,7 +20,7 @@ function ScreenShake(){
 
 function Bullet(pos, vel, velLimit){
     this.pos = pos;
-    this.vel = ifNull(vel, createVector(-5, 0));
+    this.vel = vel || createVector(-5, 0);
     this.dim = createVector(20, 20);
     var isDead = false;
     this.init = function(posX, posY, vel){
@@ -57,7 +57,7 @@ function ShootComponent(interval, bullets){
     // bullets when the entity is killed and removed
     // TODO:rethink this
     this.bullets = bullets;
-    this.interval = ifNull(interval, 200);
+    this.interval = interval || 200;
     this.blockInterval = 600;
     var max = 1000; // maximum number of bullets
     var timer = new Timer(this.interval);
@@ -67,7 +67,7 @@ function ShootComponent(interval, bullets){
     this.fireFrom = function(entity, vel, velLimit){
         if(timer.canRun()){
             this.shotSound();
-            var v = ifNull(vel, createVector(-5, 0));
+            var v = vel || createVector(-5, 0);
             this.bullets.push(new Bullet(entity.pos.copy(), v, velLimit));
             screenShake.setRange(-1.2, 1.2);
         }
