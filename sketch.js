@@ -97,6 +97,7 @@ function EnemyManager(bullets){
         enemies.push(createEnemy());
     });
 
+
     function init(enemy){
         if(initLeft){
             enemy.initL();
@@ -120,7 +121,6 @@ function EnemyManager(bullets){
 
         var scale = map(distance, 0, explosionRadius, maxScale, maxScale * 0.55);
         if(distance < explosionRadius && !isOffScreen(entity) && explodedEntity.pos.x !== entity.pos.x){
-            clog(scale, explodedEntity, entity);
             var center = rectCenter(entity);
             var target = center.sub(rectCenter(explodedEntity)); // vector pointing away from enemy that exploded
             target.normalize();
