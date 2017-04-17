@@ -348,7 +348,7 @@ function PickupManger(){
     }
 
     function spawnPickup(){
-        if(pickupTimer.canRun() && pickups.length <= 1 && totalSpawnedCount  % 2 === 0){
+        if(pickupTimer.canRun(true) && pickups.length <= 1 && totalSpawnedCount  % 2 === 0){
             var pos;
             if(totalSpawnedCount % 4 === 0){
                 pos = diagonlSpawn();
