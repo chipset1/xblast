@@ -853,27 +853,21 @@ function Timer(timerInterval, numberOfCycles) {
     var lastInterval = -1;
     var cycleCounter;
     var interval = timerInterval;
-    var numCycles = ifNull(numberOfCycles, 0);
-    var usesFrames = false;
 
-    this.useFrames = function() {
-        usesFrames = true;
-    };
-
-    this.canRun = function() {
+    this.canRun = function(wait) {
+        // wait toggle whether the timer should run and return turn
+        // immediately or if it should wait 1 cycle before returning turn
+        wait = wait || false;
         var curr = (usesFrames) ? frameCount : millis();
-        if(curr-lastInterval >= interval || lastInterval < 0) {
+        if(lastInterval < 0 && wait) lastInterval = curr;
+        if(curr-lastInterval >= interval || (lastInterval < 0 && !wait)) {
+        // if(curr-lastInterval >= interval) {
             lastInterval = curr;
-            if(numCycles > 0 && ++cycleCounter >= numCycles) stop();
             return true;
         }
         return false;
     };
 
-    function stop() {
-        numCycles = 0;
-        lastInterval = -1;
-    }
 }
 
 
