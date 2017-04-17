@@ -22,6 +22,7 @@ function Bullet(pos, vel, velLimit){
     this.pos = pos;
     this.vel = vel || createVector(-5, 0);
     this.dim = createVector(20, 20);
+    const velScale = 65;
     var isDead = false;
     this.init = function(posX, posY, vel){
         this.pos.x = posX;
@@ -41,7 +42,7 @@ function Bullet(pos, vel, velLimit){
         }
         particleSystem.fromBullet(this);
         this.vel.limit(velLimit);
-        this.pos.add(this.vel.copy(dt));
+        this.pos.add(this.vel.copy().mult(dt * velScale));
     };
     this.display = function(){
         fill(0,0,255, 120);
