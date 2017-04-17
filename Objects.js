@@ -826,15 +826,12 @@ function Particle({pos,
     self.pos = pos;
     self.vel = vel.copy();
     self.dim = dim;
-    // self.color = color;
-    self.friction = ifNull(friction, 0.98);
+    self.friction = friction || 0.98;
     var maxLife = lifeTime;
-    var lifeTime = maxLife;
-    self.dl = lifeTime;
     var angle = self.vel.heading();
 
     self.isDead = function(){
-        return lifeTime <= 0;
+        return lifeTime <= 0 || isOffScreen(this, 300);
     };
 
     function updateLine (){
@@ -850,12 +847,10 @@ function Particle({pos,
         if(type === "line") updateLine();
         self.vel.mult(self.friction);
         self.pos.add(self.vel);
-        // self.pos.add(self.vel.copy().mult(dt));
     };
 
     function mapLife(_min, _max){
         var l = map(lifeTime, maxLife, 0, _min, _max);
-        // l = constrain(l, _min, _max);
         return l;
     }
 
@@ -880,7 +875,6 @@ function Particle({pos,
 
     function linePassThrew(p1, p2){
         //draw of line that passes threw p1 from p2
-        // ellipse(p1.x, p1.y, 10, 10);
         var towards = p2.copy().sub(p1);
         towards.mult(-1);
         towards.add(p1);
@@ -893,16 +887,12 @@ function Particle({pos,
         strokeWeight(pstrokeWeight);
         linePassThrew(self.pos, createVector(self.pos.x + cos(angle) * size,
                                              self.pos.y + sin(angle) * size));
-        // linePassThrew(self.pos, createVector(self.pos.x + cos(angle) * (s * self.dim.x),
-        //                                      self.pos.y + sin(angle) * (s * self.dim.y)));
         pop();
     }
 
     function drawShape(){
         var s = mapLife(pscale.min, pscale.max);
-        // push();
         push();
-        // colorMode(HSB);
         colorMode(HSB, 360, 255, 255, 255);
         rectMode(CENTER);
         if(pNoFill) noFill();
@@ -928,7 +918,6 @@ function Particle({pos,
             pop();
         }
         pop();
-        // pop();
     }
 
     self.display = function(){
