@@ -277,7 +277,7 @@ function setup(){
 function PickupManger(){
     var self = this;
     var pickups = [];
-    var pickupTimer = new Timer(1000);
+    var pickupTimer = new Timer(1200);
     var totalSpawnedCount = 0;
     var diagonalSpawnedCount = 0;
 
@@ -364,7 +364,10 @@ function PickupManger(){
                     pos = horizontalSpawn();
                 }
             }
-            pickups.push(new PickUp(pos.copy().sub(10, 10)));
+            pickups.push(new PickUp(pos.copy()));
+
+            pos.add(10, 10);
+            particleSystem.spawnPickUp(pos);
         }
     }
     self.display = function(){
