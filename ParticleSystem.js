@@ -3,7 +3,7 @@ function ParticleSystem(){
     var particles = [];
     var healthTimer = new Timer(100);
 
-    self.add = function(pdata){
+    function add(pdata){
         particles.push(new Particle(pdata));
     };
 
@@ -39,7 +39,7 @@ function ParticleSystem(){
                     strokeColor: color,
                     pscale: {min: 12.1, max: 0.3},
                     alpha: {min: 200, max: 20}};
-        particleSystem.add(data);
+        add(data);
     };
 
     self.health = function(player){
@@ -81,7 +81,7 @@ function ParticleSystem(){
                         fillColor: color,
                         pscale: {min: 1.0, max: 0.3},
                         alpha: {min: 220, max: 0}};
-            self.add(data);
+            add(data);
         });
     };
 
@@ -115,7 +115,7 @@ function ParticleSystem(){
                             pstrokeWeight: random(2, 6),
                             pscale: {min: minScale, max: 0},
                             alpha: {min: 200, max:  0}};
-                self.add(data);
+                add(data);
             });
 
     };
@@ -146,7 +146,7 @@ function ParticleSystem(){
                         fillColor: color,
                         pscale: {min: 1.0, max: 0.3},
                         alpha: {min: 200, max: 20}};
-            self.add(data);
+            add(data);
         });
     };
 
@@ -175,7 +175,7 @@ function ParticleSystem(){
                         pNoFill: true,
                         strokeColor: color,
                         alpha: {min: 200, max: 20}};
-            self.add(data);
+            add(data);
         });
     };
 
@@ -207,7 +207,7 @@ function ParticleSystem(){
                         fillColor: color,
                         pscale: {min: 1.0, max: 6.3},
                         alpha: {min: 255, max: 20}};
-            particleSystem.add(data);
+            add(data);
         });
     };
 
@@ -252,8 +252,8 @@ function ParticleSystem(){
             data2.dim = createVector(20, 20);
             data2.vel = createVector(sin(i) * 4, cos(i) * 4);
 
-            self.add(data2);
-            self.add(data);
+            add(data2);
+            add(data);
         });
 
         _.times(30, (i) => {
@@ -283,7 +283,7 @@ function ParticleSystem(){
                               strokeColor: color,
                               pscale: {min: 5.1, max: 3.3},
                               alpha: {min: 255, max: 0}};
-            self.add(withStroke);
+            add(withStroke);
         });
     };
 
@@ -316,7 +316,7 @@ function ParticleSystem(){
                         fillColor: color,
                         pscale: {min: 5.1, max: 15.3},
                         alpha: {min: 200, max: 0}};
-            self.add(data);
+            add(data);
         });
     };
 
@@ -359,8 +359,8 @@ function ParticleSystem(){
             data2.pscale.min = data2.pscale.min + 5;
             data2.lifeTime = 100;
             data2.betweenLife = 70;
-            self.add(data2);
-            self.add(data);
+            add(data2);
+            add(data);
         });
     };
 
