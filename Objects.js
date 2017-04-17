@@ -109,7 +109,7 @@ function Enemy(){
     var self = this;
     const sizeMin = 30;
     const sizeMax = 100;
-    self.acc = createVector();
+    self.externalForce = createVector();
     self.alpha = 5;
     var minAlpha = 0;
     var maxAlpha = 200;
@@ -166,7 +166,7 @@ function Enemy(){
 
     this.applyForce = function(force){
         force.mult(velScale());
-        this.acc.add(force);
+        this.externalForce.add(force);
     };
 
     function updateAlpha(){
@@ -189,9 +189,9 @@ function Enemy(){
     this.update = function(dt){
         reInitialize();
         var scale = velScale();
-        this.vel.add(this.acc);
+        this.vel.add(this.externalForce);
         this.pos.add(this.vel.copy().mult(dt * scale));
-        this.acc.mult(0);
+        this.externalForce.mult(0);
     };
 }
 
