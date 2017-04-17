@@ -451,12 +451,10 @@ function draw(){
     rect(0, 0, width-1, height-1);
 
     if(gameNotStarted){
-        if(key === " "){
-            gameNotStarted=false;
-            // setImageVisible("controlsGif", false);
-        }
+        displayTitle();
         return;
     }
+
     var newTime = millis();
     var frameTime = (newTime - currentTime) / 1000;
     currentTime = newTime;
@@ -469,19 +467,28 @@ function draw(){
     screenShake.update();
     particleSystem.display();
     player.display();
+    pickupManger.display();
     bullets.forEach(function(b){
         b.display();
     });
     enemyManager.display();
-    pickupManger.display();
-    if(player.health.isZero()){
-        endScreen();
-        if(keyIsPressed && key === " "){
-            gameBackground.transitionToNormal();
-            particleSystem.respawnExplosion(RESPAWN_POSITION);
-            init();
-        }
     displayScore();
+    if(player.health.isZero()) endScreen();
+}
+
+
+function keyPressed(){
+    if(gameNotStarted && key === " "){
+        gameBackground.transitionToStart();
+        gameNotStarted=false;
+    }
+    if(player.health.isZero() && key === " "){
+        gameInit();
+        gameBackground.endWhiteOut();
+        gameBackground.transitionToNormal();
+        gameAudio.playExplosion();
+        gameAudio.playExplosion();
+        particleSystem.respawnExplosion(RESPAWN_POSITION);
     }
 }
 
