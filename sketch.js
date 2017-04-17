@@ -186,9 +186,6 @@ function EnemyManager(bullets){
     }
 
     self.update = function(dt){
-        debugText("enemies", enemies.length);
-        debugText("enemies killed", enemiesKilled);
-
         enemies.forEach(function(e){
             if(AABBvsAABB(player, e)){
                 if(player.health.equals(2)){
