@@ -263,9 +263,10 @@ function setup(){
     canvas.parent('container');
     gameBackground = new Background();
     screenShake = new ScreenShake();
-    init();
-    textFont("Space Mono");
     particleSystem = new ParticleSystem();
+    gameInit();
+    gameAudio.backgroundLoop();
+    textFont(font);
 
     if(debug){
         var gui = new dat.GUI();
@@ -274,7 +275,6 @@ function setup(){
         gui.add(player, 'reset');
         gui.add(player, 'holdToMove').listen();
     }
-    gameAudio.backgroundLoop();
 }
 
 function PickupManger(){
