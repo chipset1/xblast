@@ -63,12 +63,13 @@ function wrapAroundScreen(sprite, fn){
     }
 }
 
-function isOffScreen(entity){
-  var yMin = 0;
-  var yMax = height;
-  var xMin = 0;
-  var xMax = width;
-  return entity.pos.x < xMin || entity.pos.x > xMax || entity.pos.y < yMin || entity.pos.y > yMax;
+function isOffScreen(entity, offset){
+    offset = offset || 0;
+    var yMin = 0 - offset;
+    var yMax = height + offset;
+    var xMin = 0 - offset;
+    var xMax = width + offset;
+    return entity.pos.x < xMin || entity.pos.x > xMax || entity.pos.y < yMin || entity.pos.y > yMax;
 }
 
 function limitToBoundary(sprite, xBounds, yBounds){
@@ -93,7 +94,13 @@ function limitToBoundary(sprite, xBounds, yBounds){
   }
 }
 
-function textStackFn(startX, startY, spaceY){
+function chanceOr(n1, percent, other){
+    if(chance(percent)) {
+        return n1;
+    } else {
+        return other;
+    }
+}
     var rowNames = [];
     return function(rowName, value){
         var index = _.indexOf(rowNames, rowName);
