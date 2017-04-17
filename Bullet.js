@@ -1,4 +1,4 @@
-function Bullet(pos, vel, velLimit){
+function Bullet(pos, vel){
     this.pos = pos;
     this.vel = vel || createVector(-5, 0);
     this.dim = createVector(20, 20);

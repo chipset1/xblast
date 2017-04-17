@@ -13,8 +13,8 @@ function ShootComponent(interval, bullets){
 
     this.fireFrom = function(entity, vel){
         if(timer.canRun()){
-            this.shotSound();
-            this.bullets.push(new Bullet(entity.pos.copy(), v));
+            this.shotSound(vel);
+            this.bullets.push(new Bullet(entity.pos.copy(), vel));
             screenShake.setRange(-1.2, 1.2);
         }
     };
