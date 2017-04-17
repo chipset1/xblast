@@ -3,6 +3,7 @@
 // currently there's a lot of clean up and refactoring I need to do before I feel like this code is presentable.
 // When its done i will put it up on github
 
+"use strict";
 var debugText = textStackFn(20, 40, 20);
 
 var gameBackground;
@@ -19,63 +20,11 @@ var RESPAWN_POSITION;
 var currentTime = 0;
 
 var debug = false;
+var font;
 var gameNotStarted = true;
 var score = 0;
 var waveNumber = 1;
 var scoreParams = {killedEnemy: 100, pickUp: 10, hitByEnemy: -10};
-
-function Audio(){
-    var self = this;
-    var explosions = [];
-    var background;
-    var explosionIndex = 0;
-    var pickupEffect;
-    var pickupExplosion;
-    var baseShot;
-    var toneShots;
-
-    const toneShotsCount = 5;
-
-    self.preload = function(){
-        pickupEffect = loadSound("assets/audio/pickupEffect.wav");
-        pickupExplosion = loadSound("assets/audio/pickupExplosion.wav");
-        explosions.push(loadSound("assets/audio/explosion.wav"));
-        explosions.push(loadSound("assets/audio/explosion2.wav"));
-        background = loadSound("assets/audio/background.wav");
-        baseShot = loadSound("assets/audio/shot.wav");
-        toneShots = _.range(0, toneShotsCount+1).map(num => {
-            return loadSound("assets/audio/toneShots/" + num + ".wav");
-        });
-    };
-
-    self.playPickupExplosion = function(){
-        pickupExplosion.rate(0.9);
-        pickupExplosion.play();
-    };
-
-    self.playPickupEffect = function(){
-        pickupEffect.setVolume(0.2);
-        pickupEffect.play();
-    };
-
-    self.playBulletShot = function(){
-        var index = int(random(0, 6));
-        var toneShot = toneShots[index];
-        baseShot.play();
-        toneShot.play();
-    };
-
-    self.backgroundLoop = function(){
-        background.loop();
-    };
-
-    self.playExplosion = function(){
-        var explosion = explosions[explosionIndex % explosions.length];
-        explosion.rate(random(0.9, 1.0));
-        explosion.play();
-        explosionIndex++;
-    };
-}
 
 function removeIfdead(entities){
     for(var i = entities.length - 1; i >= 0; i--){
@@ -83,135 +32,6 @@ function removeIfdead(entities){
             arrayRemove(entities, i);
         }
     }
-}
-
-
-function EnemyManager(bullets){
-    var self = this;
-    var enemiesKilled = 0;
-    const startEnemies = 5;
-    var enemies = [];
-    var initLeft = true;
-
-    _.times(startEnemies, (i) => {
-        enemies.push(createEnemy());
-    });
-
-
-    function init(enemy){
-        if(initLeft){
-            enemy.initL();
-        } else {
-            enemy.initR();
-        }
-        initLeft = !initLeft;
-    }
-
-    function createEnemy(){
-        var enemy = new Enemy();
-        init(enemy);
-        return enemy;
-    }
-
-    function explosiveForce(explodedEntity, entity, _maxScale){
-        screenShake.setRange(-12, 12);
-        var maxScale = _maxScale;
-        var explosionRadius = 250;
-        var distance = entity.pos.dist(explodedEntity.pos);
-
-        var scale = map(distance, 0, explosionRadius, maxScale, maxScale * 0.55);
-        if(distance < explosionRadius && !isOffScreen(entity) && explodedEntity.pos.x !== entity.pos.x){
-            var center = rectCenter(entity);
-            var target = center.sub(rectCenter(explodedEntity)); // vector pointing away from enemy that exploded
-            target.normalize();
-            target.mult(scale);
-            return target;
-        }
-        return createVector();
-    }
-
-    self.applyExplosiveForce = function(entity){
-       enemies.forEach(function(e){
-           e.applyForce(explosiveForce(entity, e, 150));
-       });
-    };
-
-    function checkBulletCollision(e){
-        bullets.forEach(function(b){
-            if(AABBvsAABB(b, e)){
-                spawnNewEnemies();
-                score+=scoreParams.killedEnemy;
-                enemiesKilled++;
-                gameAudio.playExplosion();
-                e.handleCollision("bullet");
-                player.applyForce(explosiveForce(e, player, 200));
-                self.applyExplosiveForce(b);
-                b.kill();
-                init(e);
-            }
-        });
-    }
-
-    function addOnEnemiesKilled(max, numberToAdd){
-        if(enemiesKilled === max){
-            waveNumber++;
-            _.times(numberToAdd, function(){
-                enemies.push(createEnemy());
-            });
-        }
-    }
-
-    function spawnNewEnemies(){
-        var waves = _.range(40, 500, 10);
-        addOnEnemiesKilled(10, 3);
-        addOnEnemiesKilled(20, 2);
-        addOnEnemiesKilled(30, 1);
-        var shouldSpawn = _.some(waves, function(number){
-            return enemiesKilled === number;
-        });
-        if(shouldSpawn) {
-            waveNumber++;
-            enemies.push(createEnemy());
-        }
-    }
-
-    self.getEnemiesKilled = function(){
-        return enemiesKilled;
-    };
-
-    function pastTopOrBottom(enemy){
-        var pos = enemy.pos;
-        var enemyWidth = enemy.dim.x;
-        return pos.y < 0 - enemyWidth || pos.y > height + enemyWidth;
-    }
-
-    self.update = function(dt){
-        enemies.forEach(function(e){
-            if(AABBvsAABB(player, e)){
-                if(player.health.equals(2)){
-                    gameBackground.transitionToLowHealth();
-                }
-                gameAudio.playExplosion();
-                gameBackground.activateWhiteOutMode();
-                score += scoreParams.hitByEnemy;
-                e.handleCollision("player");
-                self.applyExplosiveForce(e);
-                player.applyForce(explosiveForce(e, player, 200));
-                player.health.sub(1);
-                init(e);
-            }
-            checkBulletCollision(e);
-            if(pastTopOrBottom(e)) init(e);
-            e.update(dt);
-        });
-    };
-
-    self.display = function(){
-        enemies.forEach(function(e){
-            e.display();
-        });
-    };
-
 }
 
 function endScreen(){
