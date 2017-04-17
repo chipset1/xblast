@@ -3,18 +3,19 @@ function ShootComponent(interval, bullets){
     // updating of bullets in done out side of the entity this is used in to prevent removing all the
     // bullets when the entity is killed and removed
     // TODO:rethink this
-    this.bullets = bullets;
-    this.interval = interval || 200;
-    this.blockInterval = 600;
+    var self = this;
+    self.bullets = bullets;
+    self.interval = interval || 200;
+    self.blockInterval = 600;
     var max = 1000; // maximum number of bullets
-    var timer = new Timer(this.interval);
+    var timer = new Timer(self.interval);
 
-    this.shotSound = function(vel){};
+    self.shotSound = function(vel){};
 
-    this.fireFrom = function(entity, vel){
+    self.fireFrom = function(entity, vel){
         if(timer.canRun()){
-            this.shotSound(vel);
-            this.bullets.push(new Bullet(entity.pos.copy(), vel));
+            self.shotSound(vel);
+            self.bullets.push(new Bullet(entity.pos.copy(), vel));
             screenShake.setRange(-1.2, 1.2);
         }
     };

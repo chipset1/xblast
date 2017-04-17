@@ -29,7 +29,7 @@ function Particle({pos,
     var angle = self.vel.heading();
 
     self.isDead = function(){
-        return lifeTime <= 0 || isOffScreen(this, 300);
+        return lifeTime <= 0 || isOffScreen(self, 300);
     };
 
     function updateLine (){

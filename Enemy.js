@@ -45,11 +45,11 @@ function Enemy(){
         return map(self.dim.x, 30, 100, 1, 0.40);
     }
 
-    this.handleCollision = function(entityName){
+    self.handleCollision = function(entityName){
         if(entityName === "player"){
             particleSystem.explosion(player.pos.copy());
         }
-        particleSystem.explosion(this.pos.copy());
+        particleSystem.explosion(self.pos.copy());
     };
 
     function resetDim(){
@@ -57,16 +57,16 @@ function Enemy(){
         self.dim = createVector(size, size);
     }
 
-    this.applyForce = function(force){
+    self.applyForce = function(force){
         force.mult(velScale());
-        this.externalForce.add(force);
+        self.externalForce.add(force);
     };
 
     function updateAlpha(){
         return cmap(player.pos.dist(self.pos), maxAlphaDistance, 0, minAlpha, maxAlpha);
     }
 
-    this.display = function(){
+    self.display = function(){
         push();
         noStroke();
         alpha = updateAlpha();
@@ -79,11 +79,11 @@ function Enemy(){
         pop();
     };
 
-    this.update = function(dt){
+    self.update = function(dt){
         reInitialize();
         var scale = velScale();
-        this.vel.add(this.externalForce);
-        this.pos.add(this.vel.copy().mult(dt * scale));
-        this.externalForce.mult(0);
+        self.vel.add(self.externalForce);
+        self.pos.add(self.vel.copy().mult(dt * scale));
+        self.externalForce.mult(0);
     };
 }

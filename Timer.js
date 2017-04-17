@@ -1,9 +1,10 @@
 function Timer(timerInterval, numberOfCycles) {
+    var self = this;
     var lastInterval = -1;
     var cycleCounter;
     var interval = timerInterval;
 
-    this.canRun = function(wait) {
+    self.canRun = function(wait) {
         // wait toggle whether the timer should run and return turn
         // immediately or if it should wait 1 cycle before returning turn
         wait = wait || false;

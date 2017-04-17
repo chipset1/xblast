@@ -1,28 +1,29 @@
 function PickUp(pos){
-    this.pos = pos;
-    this.vel = createVector();
-    this.dim = createVector(20, 20);
+    var self = this;
+    self.pos = pos;
+    self.vel = createVector();
+    self.dim = createVector(20, 20);
     var isDead = false;
 
-    this.kill = function(){
+    self.kill = function(){
         isDead = true;
     };
-    this.isDead = function(){
+    self.isDead = function(){
         return isDead;
     };
 
-    this.display = function(){
+    self.display = function(){
         push();
         noStroke();
         colorMode(HSB, 360, 100, 100, 1);
-        var distance = player.pos.dist(this.pos);
+        var distance = player.pos.dist(self.pos);
         var alpha = map(distance, 200, 0, 0.3, 1.0);
 
         alpha = max(alpha, 0.3);
         fill(200, 98, 99, alpha);
 
         ellipseMode(CORNER);
-        ellipse(this.pos.x, this.pos.y, this.dim.x, this.dim.y);
+        ellipse(self.pos.x, self.pos.y, self.dim.x, self.dim.y);
         pop();
     };
 }

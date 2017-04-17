@@ -1,17 +1,18 @@
 function Transition(length){
+    var self = this;
     var hasStarted = false;
     var startTime = 0;
 
-    this.start = function(){
+    self.start = function(){
         startTime = millis();
         hasStarted = true;
     };
 
-    this.map = function(min, max){
+    self.map = function(min, max){
         return map(millis(), startTime, startTime + length, min, max);
     };
 
-    this.isRunning = function(){
+    self.isRunning = function(){
         // come up with a better function name
         if(millis() > startTime + length){
             hasStarted = false;

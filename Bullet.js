@@ -1,33 +1,34 @@
 function Bullet(pos, vel){
-    this.pos = pos;
-    this.vel = vel || createVector(-5, 0);
-    this.dim = createVector(20, 20);
+    var self = this;
+    self.pos = pos;
+    self.vel = vel || createVector(-5, 0);
+    self.dim = createVector(20, 20);
     const velScale = 65;
     const velLimit = 12;
     var isDead = false;
-    this.init = function(posX, posY, vel){
-        this.pos.x = posX;
-        this.pos.y = posY;
-        this.vel = vel;
+    self.init = function(posX, posY, vel){
+        self.pos.x = posX;
+        self.pos.y = posY;
+        self.vel = vel;
     };
-    this.kill = function(){
+    self.kill = function(){
         isDead = true;
     };
-    this.isDead = function(){
+    self.isDead = function(){
         return isDead;
     };
 
-    this.update = function(dt){
-        if(this.pos.x < 0 || this.pos.x > width){
-            this.kill();
+    self.update = function(dt){
+        if(self.pos.x < 0 || self.pos.x > width){
+            self.kill();
         }
-        particleSystem.fromBullet(this);
-        this.vel.limit(velLimit);
-        this.pos.add(this.vel.copy().mult(dt * velScale));
+        particleSystem.fromBullet(self);
+        self.vel.limit(velLimit);
+        self.pos.add(self.vel.copy().mult(dt * velScale));
     };
-    this.display = function(){
+    self.display = function(){
         fill(0,0,255, 120);
         noStroke();
-        rect(this.pos.x, this.pos.y, this.dim.x, this.dim.y);
+        rect(self.pos.x, self.pos.y, self.dim.x, self.dim.y);
     };
 }

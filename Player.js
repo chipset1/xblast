@@ -1,15 +1,15 @@
 function Player(x, y, bullets){
     var self = this;
-    this.pos = createVector(x, y);
-    this.vel = createVector(0, 0);
-    this.acc = createVector();
-    this.dim = createVector(15, 15);
-    this.shoot = new ShootComponent(300, bullets);
-    this.shoot.shotSound = gameAudio.playBulletShot;
-    this.health = new HealthComponent(4);
-    this.maxDistance = 400;
-    this.friction = 0.99;
-    this.holdToMove = false;
+    self.pos = createVector(x, y);
+    self.vel = createVector(0, 0);
+    self.acc = createVector();
+    self.dim = createVector(15, 15);
+    self.shoot = new ShootComponent(300, bullets);
+    self.shoot.shotSound = gameAudio.playBulletShot;
+    self.health = new HealthComponent(4);
+    self.maxDistance = 400;
+    self.friction = 0.99;
+    self.holdToMove = false;
     var fillColor = color(255, 200);
 
 
@@ -31,60 +31,60 @@ function Player(x, y, bullets){
         return dir;
     }
 
-    this.applyForce = function(force){
-        this.acc.add(force);
-        this.vel.add(this.acc);
+    self.applyForce = function(force){
+        self.acc.add(force);
+        self.vel.add(self.acc);
     };
 
-    this.mouseReleased = function(){
-        if(!this.holdToMove){
-            this.vel.add(this.acc);
+    self.mouseReleased = function(){
+        if(!self.holdToMove){
+            self.vel.add(self.acc);
         }
     };
 
-    this.reset = function(){
-        this.friction = 0.99;
-        // this.maxDistance = 200;
+    self.reset = function(){
+        self.friction = 0.99;
+        // self.maxDistance = 200;
     };
 
-    this.display = function(){
+    self.display = function(){
         push();
         if(debug){
             push();
             var mouse = mouseVector();
-            var dir = mouse.copy().sub(this.pos);
+            var dir = mouse.copy().sub(self.pos);
             fill(255);
-            text("acc distance: " + int(dir.mag()), this.pos.x, this.pos.y - 60);
+            text("acc distance: " + int(dir.mag()), self.pos.x, self.pos.y - 60);
             stroke(255, 200);
-            line(mouse.x, mouse.y, this.pos.x + this.dim.x / 2, this.pos.y + this.dim.y / 2);
+            line(mouse.x, mouse.y, self.pos.x + self.dim.x / 2, self.pos.y + self.dim.y / 2);
             stroke(255, 200);
             noFill();
-            ellipse( this.pos.x + this.dim.x / 2, this.pos.y + this.dim.y / 2, this.maxDistance * 2, this.maxDistance * 2);
+            ellipse( self.pos.x + self.dim.x / 2, self.pos.y + self.dim.y / 2, self.maxDistance * 2, self.maxDistance * 2);
             pop();
         }
         noStroke();
         fill(fillColor);
-        rect(this.pos.x, this.pos.y, this.dim.x, this.dim.y);
+        rect(self.pos.x, self.pos.y, self.dim.x, self.dim.y);
         pop();
     };
 
-    this.update = function(dt){
+    self.update = function(dt){
         const accScale = 1.7;
         const bulletScale = -0.08;
-        particleSystem.health(this);
-        if(!this.health.isZero()){
+        particleSystem.health(self);
+        if(!self.health.isZero()){
             if(mouseIsPressed){
-                this.shoot.fireFrom(this, hitMove(this, bulletScale));
+                self.shoot.fireFrom(self, hitMove(self, bulletScale));
             }
-                this.acc = hitMove(this, accScale);
+                self.acc = hitMove(self, accScale);
         }
-        if(this.holdToMove){
-            this.acc = hitMove(this);
-            this.vel.add(this.acc);
+        if(self.holdToMove){
+            self.acc = hitMove(self);
+            self.vel.add(self.acc);
         }
 
-        this.vel.mult(this.friction);
-        this.vel.limit(this.maxDistance + 100);
-        this.pos.add(this.vel.copy().mult(dt));
+        self.vel.mult(self.friction);
+        self.vel.limit(self.maxDistance + 100);
+        self.pos.add(self.vel.copy().mult(dt));
     };
 }
