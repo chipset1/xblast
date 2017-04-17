@@ -255,9 +255,8 @@ function startScreen(){
 
 function setup(){
     // 3 : 2 aspect ratio
-    var canvas = createCanvas(1200, 800);
+    createCanvas(1200, 800);
     RESPAWN_POSITION = Object.freeze(createVector(width/2, height/2));
-    canvas.parent('container');
     gameBackground = new Background();
     screenShake = new ScreenShake();
     particleSystem = new ParticleSystem();
