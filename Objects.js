@@ -224,7 +224,7 @@ function Player(x, y, bullets){
     this.dim = createVector(15, 15);
     this.shoot = new ShootComponent(300, bullets);
     this.shoot.shotSound = gameAudio.playBulletShot;
-    this.health = new HealthComponent(3);
+    this.health = new HealthComponent(4);
     this.maxDistance = 400;
     this.friction = 0.99;
     this.holdToMove = false;
@@ -354,15 +354,18 @@ function ParticleSystem(){
         if(!healthTimer.canRun()) return;
         var hue = {start: 140};
         switch(player.health.current){
+            case 3:
+                hue.start = 180;
+            break;
             case 2:
                 hue.start = 240;
-                break;
+            break;
             case 1:
                 hue.start = 340;
-                break;
+            break;
             case 0:
                 hue.start = 360;
-                break;
+            break;
         }
         var color = {start: {h: hue.start,
                              s: 200,
