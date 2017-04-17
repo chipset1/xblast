@@ -71,11 +71,10 @@ function Player(x, y, bullets){
     this.update = function(dt){
         const accScale = 1.7;
         const bulletScale = -0.08;
-        const bulletVelLimit = 12;
         particleSystem.health(this);
         if(!this.health.isZero()){
             if(mouseIsPressed){
-                this.shoot.fireFrom(this, hitMove(this, bulletScale), bulletVelLimit);
+                this.shoot.fireFrom(this, hitMove(this, bulletScale));
             }
                 this.acc = hitMove(this, accScale);
         }

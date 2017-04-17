@@ -11,11 +11,10 @@ function ShootComponent(interval, bullets){
 
     this.shotSound = function(){};
 
-    this.fireFrom = function(entity, vel, velLimit){
+    this.fireFrom = function(entity, vel){
         if(timer.canRun()){
             this.shotSound();
-            var v = vel || createVector(-5, 0);
-            this.bullets.push(new Bullet(entity.pos.copy(), v, velLimit));
+            this.bullets.push(new Bullet(entity.pos.copy(), v));
             screenShake.setRange(-1.2, 1.2);
         }
     };

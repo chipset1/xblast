@@ -3,6 +3,7 @@ function Bullet(pos, vel, velLimit){
     this.vel = vel || createVector(-5, 0);
     this.dim = createVector(20, 20);
     const velScale = 65;
+    const velLimit = 12;
     var isDead = false;
     this.init = function(posX, posY, vel){
         this.pos.x = posX;
