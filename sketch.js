@@ -21,8 +21,8 @@ var currentTime = 0;
 var debug = false;
 var gameNotStarted = true;
 var score = 0;
-var scoreParams = {killedEnemy: 1000, pickUp: 100, hitPickup: -400};
 var waveNumber = 1;
+var scoreParams = {killedEnemy: 100, pickUp: 10, hitByEnemy: -10};
 
 function Audio(){
     var self = this;
