@@ -22,6 +22,7 @@ var debug = false;
 var gameNotStarted = true;
 var score = 0;
 var scoreParams = {killedEnemy: 1000, pickUp: 100, hitPickup: -400};
+var waveNumber = 1;
 
 function Audio(){
     var self = this;
@@ -408,7 +409,22 @@ function PickupManger(){
         }
         removeIfdead(pickups);
     };
+}
 
+function displayScore(){
+    const size = 50;
+    const x = (width/2) - 140;
+    const y = 60;
+    const spaceX = 55;
+
+    push();
+    noStroke();
+    fill(255, 150);
+    textSize(50);
+    text("score:" + score, x, y);
+    text("wave:" + waveNumber, (width/17), height - 30);
+    noStroke();
+    pop();
 }
 
 function update(dt){
@@ -449,11 +465,7 @@ function draw(){
         update(deltaTime);
         frameTime -= deltaTime;
     }
-    push();
-    textSize(32);
-    fill(255);
-    text("score:" + score, (width/2) - 80, 60);
-    pop();
+
     screenShake.update();
     particleSystem.display();
     player.display();
@@ -469,6 +481,7 @@ function draw(){
             particleSystem.respawnExplosion(RESPAWN_POSITION);
             init();
         }
+    displayScore();
     }
 }
 
