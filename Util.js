@@ -101,6 +101,8 @@ function chanceOr(n1, percent, other){
         return other;
     }
 }
+
+function textStackFn(startX, startY, spaceY){
     var rowNames = [];
     return function(rowName, value){
         var index = _.indexOf(rowNames, rowName);
