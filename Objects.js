@@ -884,8 +884,8 @@ function Background(){
     const maxAlpha = 0.4;
     var whiteOutMode = false;
 
-    self.toNormalTransition = new Transition(2000);
-    self.toLowHealthTransition = new Transition(3000);
+    var toNormalTransition = new Transition(2000);
+    var toLowHealthTransition = new Transition(3000);
     var toStartTransition = new Transition(2000);
 
     var triangles = newTriangles();
@@ -960,11 +960,11 @@ function Background(){
     }
 
     self.transitionToNormal = function(){
-        self.toNormalTransition.start();
+        toNormalTransition.start();
     };
 
     self.transitionToLowHealth = function(){
-        self.toLowHealthTransition.start();
+        toLowHealthTransition.start();
     };
 
     self.transitionToStart = function(){
@@ -988,18 +988,18 @@ function Background(){
                 tri.brightness = brightness;
             });
         }
-        if(self.toLowHealthTransition.isRunning()){
+        if(toLowHealthTransition.isRunning()){
             all.forEach(tri =>{
-                var mapTransition = self.toLowHealthTransition.map;
+                var mapTransition = toLowHealthTransition.map;
                 tri.alpha = mapTransition(nextAlpha(tri), alpha);
                 tri.hue = mapTransition(tri.initialHue, hue);
                 tri.saturation = mapTransition(tri.initialSaturation, saturation);
                 tri.brightness = mapTransition(tri.initialBrightness, brightness);
             });
         }
-        if(self.toNormalTransition.isRunning()){
+        if(toNormalTransition.isRunning()){
             all.forEach(tri =>{
-                var mapTransition = self.toNormalTransition.map;
+                var mapTransition = toNormalTransition.map;
                 tri.alpha = mapTransition(alpha, nextAlpha(tri));
                 tri.hue = mapTransition(hue, int(tri.initialHue));
                 tri.saturation = mapTransition(saturation, tri.initialSaturation);
