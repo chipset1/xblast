@@ -456,6 +456,7 @@ function draw(){
 
     if(gameNotStarted){
         displayTitle();
+        currentTime = millis();
         return;
     }
 
