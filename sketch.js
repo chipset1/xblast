@@ -219,25 +219,27 @@ function EnemyManager(bullets){
 
 function endScreen(){
     push();
-    fill(255);
+    fill(255, 150);
     textSize(32);
-    text("GAME OVER", (width/2) - 100, height/2);
-    text("press SPACE to restart", (width/2) -100, (height/2) + 32);
+    noStroke();
+    text("GAME OVER", (width/2) - 120, height/2);
+    text("press SPACE to restart", (width/2) -300, (height/2) + 32);
     pop();
 }
 
-function init(){
+function gameInit(){
     score = 0;
+    waveNumber = 1;
     bullets = [];
     pickupManger = new PickupManger();
     enemyManager = new EnemyManager(bullets);
-    enemyManager.init();
     player = new Player(RESPAWN_POSITION.x, RESPAWN_POSITION.y, bullets);
 }
 
 function preload(){
     gameAudio = new Audio();
     gameAudio.preload();
+    font = loadFont('RubikMonoOne-Regular.ttf');
 }
 
 function startScreen(){
@@ -439,12 +441,17 @@ function update(dt){
     wrapAroundScreen(player);
 }
 
+function displayTitle(){
+    textSize(80);
+    noStroke();
+    fill(255, 200);
+    text("XBLAST", (width/2) - 200, height/2);
+}
+
 function draw(){
     background(0);
-
     gameBackground.display();
-    stroke(255, 120);
-    debugText("frameRate", int(frameRate()));
+
     translate(screenShake.amount.x, screenShake.amount.y);
     stroke(255, 100);
     noFill();
