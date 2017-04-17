@@ -942,7 +942,6 @@ function Timer(timerInterval, numberOfCycles) {
         var curr = millis();
         if(lastInterval < 0 && wait) lastInterval = curr;
         if(curr-lastInterval >= interval || (lastInterval < 0 && !wait)) {
-        // if(curr-lastInterval >= interval) {
             lastInterval = curr;
             return true;
         }

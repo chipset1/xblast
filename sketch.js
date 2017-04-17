@@ -10,11 +10,9 @@ var particleSystem;
 var pickupManger;
 var screenShake;
 var enemyManager;
-var shake;
 var bullets;
 var player;
 var gameAudio;
-var startScreenEntities = [];
 
 const dt = 1/60.0;
 var RESPAWN_POSITION;
@@ -274,36 +272,6 @@ function setup(){
         gui.add(player, 'holdToMove').listen();
     }
     gameAudio.backgroundLoop();
-}
-
-function EntityContainer(){
-    var self = this;
-    var entities = [];
-    var entitiesByType = {};
-
-    function addByType(entity){
-        //constructor name will return a string
-        var array = entitiesByType[entity.constructor.name];
-        if(array){
-            array.push(entity);
-        } else {
-            entitiesByType[entity.constructor.name] = [entity];
-        }
-    }
-
-    self.push = function(entity){
-        entities.push(entity);
-        addByType(entity);
-    };
-
-    self.getAll = function(){
-        return entities;
-    };
-
-    self.get = function(type){
-        // type is string eg Bullet Enemy
-        return entitiesByType[type];
-    };
 }
 
 function PickupManger(){
