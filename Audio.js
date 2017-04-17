@@ -32,9 +32,12 @@ function Audio(){
         pickupEffect.play();
     };
 
-    self.playBulletShot = function(){
+    self.playBulletShot = function(bulletVel){
         var index = int(random(0, 6));
         var toneShot = toneShots[index];
+
+        var rate = cmap(bulletVel.mag(), 0, 13, 0.85, 1);
+        baseShot.rate(rate);
         baseShot.play();
         toneShot.play();
     };

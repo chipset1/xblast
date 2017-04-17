@@ -9,7 +9,7 @@ function ShootComponent(interval, bullets){
     var max = 1000; // maximum number of bullets
     var timer = new Timer(this.interval);
 
-    this.shotSound = function(){};
+    this.shotSound = function(vel){};
 
     this.fireFrom = function(entity, vel){
         if(timer.canRun()){
