@@ -54,6 +54,8 @@ function Tri(x, y, {hue, saturation, brightness, scale, shimmerData}){
 
         fill(self.hue + shimmer(shimmerData.min, shimmerData.max), self.saturation, self.brightness, self.alpha);
 
+        var x = self.pos.x;
+        var y = self.pos.y;
         var a = map(scale, 2.2, 4.3, 1, 5);
         var multScale = mapSin(y + cos(tan(3 * x)) + (seconds() / a), 1, 1.3);
         var offsetX = mapSin((y * x) + seconds(), 0, 10);
