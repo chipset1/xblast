@@ -355,7 +355,7 @@ function ParticleSystem(){
                         alpha: {min: 220, max: 0}};
 
             var data2 = _.cloneDeep(data);
-            if(i > 1) data2.pos = pos.copy().add(random(10), random(10));
+            if(i > 1) data2.pos = pos.copy().add(randomVector(-10, 10));
             data2.pscale.min = data2.pscale.min + 5;
             data2.lifeTime = 100;
             data2.betweenLife = 70;
