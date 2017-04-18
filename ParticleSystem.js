@@ -44,8 +44,10 @@ function ParticleSystem(){
 
     self.health = function(player){
         if(!healthTimer.canRun()) return;
-        var hue = {start: 140};
         switch(player.health.current){
+            case 4:
+                hue.start = 140;
+            break;
             case 3:
                 hue.start = 180;
             break;
