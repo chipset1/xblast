@@ -56,7 +56,7 @@ function gameInit(){
 function preload(){
     gameAudio = new Audio();
     gameAudio.preload();
-    font = loadFont('RubikMonoOne-Regular.ttf');
+    font = loadFont('assets/RubikMonoOne-Regular.ttf');
 }
 
 function startScreen(){
