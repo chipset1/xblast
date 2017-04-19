@@ -1,8 +1,3 @@
-// if your a dev trying to learn something from the source code
-// take everything with a grain of salt. This is my first significant game written in Javascript and
-// currently there's a lot of clean up and refactoring I need to do before I feel like this code is presentable.
-// When its done i will put it up on github
-
 "use strict";
 var debugText = textStackFn(20, 40, 20);
 
@@ -37,6 +32,7 @@ function endScreen(){
 }
 
 function gameInit(){
+    // reset game state when game is restarted
     score = 0;
     waveNumber = 1;
     bullets = [];
@@ -126,6 +122,7 @@ function draw(){
     gameBackground.display();
 
     translate(screenShake.amount.x, screenShake.amount.y);
+    // screen outline
     stroke(255, 100);
     noFill();
     rect(0, 0, width-1, height-1);
