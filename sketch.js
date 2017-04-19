@@ -21,14 +21,10 @@ var score = 0;
 var waveNumber = 1;
 var scoreParams = {killedEnemy: 100, pickUp: 10, hitByEnemy: -10};
 
-function endScreen(){
-    push();
-    fill(255, 150);
-    textSize(32);
-    noStroke();
-    text("GAME OVER", (width/2) - 120, height/2);
-    text("press SPACE to restart", (width/2) -300, (height/2) + 32);
-    pop();
+function preload(){
+    gameAudio = new Audio();
+    gameAudio.preload();
+    font = loadFont('assets/RubikMonoOne-Regular.ttf');
 }
 
 function gameInit(){
@@ -39,26 +35,6 @@ function gameInit(){
     pickupManger = new PickupManger();
     enemyManager = new EnemyManager(bullets);
     player = new Player(RESPAWN_POSITION.x, RESPAWN_POSITION.y, bullets);
-}
-
-function preload(){
-    gameAudio = new Audio();
-    gameAudio.preload();
-    font = loadFont('assets/RubikMonoOne-Regular.ttf');
-}
-
-function startScreen(){
-    push();
-    textSize(32);
-    fill(255);
-    var x = (width/2) - 260;
-    var y = (height/2) - 80;
-
-    text("WIP - Untitled game ", x, y);
-    text("press SPACE to start", x, y + 32);
-    text("click with your mouse to move", x, y + (32 * 2) );
-    text("press D and A key to shoot", x, y + (32 * 3) );
-    pop();
 }
 
 function setup(){
@@ -82,22 +58,6 @@ function setup(){
 }
 
 
-function displayScore(){
-    const size = 50;
-    const x = (width/2) - 140;
-    const y = 60;
-    const spaceX = 55;
-
-    push();
-    noStroke();
-    fill(255, 150);
-    textSize(50);
-    text("score:" + score, x, y);
-    text("wave:" + waveNumber, (width/17), height - 30);
-    noStroke();
-    pop();
-}
-
 function update(dt){
     particleSystem.update(dt);
     enemyManager.update(dt);
@@ -108,13 +68,6 @@ function update(dt){
     removeIfdead(bullets);
     player.update(dt);
     wrapAroundScreen(player);
-}
-
-function displayTitle(){
-    textSize(80);
-    noStroke();
-    fill(255, 200);
-    text("XBLAST", (width/2) - 200, height/2);
 }
 
 function draw(){
@@ -154,7 +107,6 @@ function draw(){
     if(player.health.isZero()) endScreen();
 }
 
-
 function keyPressed(){
     if(gameNotStarted && key === " "){
         gameBackground.transitionToStart();
@@ -178,4 +130,51 @@ function mouseReleased(){
     if(!player.health.isZero()){
         player.mouseReleased();
     }
+}
+
+function startScreen(){
+    push();
+    textSize(32);
+    fill(255);
+    var x = (width/2) - 260;
+    var y = (height/2) - 80;
+
+    text("WIP - Untitled game ", x, y);
+    text("press SPACE to start", x, y + 32);
+    text("click with your mouse to move", x, y + (32 * 2) );
+    text("press D and A key to shoot", x, y + (32 * 3) );
+    pop();
+}
+
+function endScreen(){
+    push();
+    fill(255, 150);
+    textSize(32);
+    noStroke();
+    text("GAME OVER", (width/2) - 120, height/2);
+    text("press SPACE to restart", (width/2) -300, (height/2) + 32);
+    pop();
+}
+
+function displayTitle(){
+    textSize(80);
+    noStroke();
+    fill(255, 200);
+    text("XBLAST", (width/2) - 200, height/2);
+}
+
+function displayScore(){
+    const size = 50;
+    const x = (width/2) - 140;
+    const y = 60;
+    const spaceX = 55;
+
+    push();
+    noStroke();
+    fill(255, 150);
+    textSize(50);
+    text("score:" + score, x, y);
+    text("wave:" + waveNumber, (width/17), height - 30);
+    noStroke();
+    pop();
 }
