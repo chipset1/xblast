@@ -110,3 +110,15 @@ function keyDirection(){
 // function square(pos, size){
 //     rect(pos.x, pos.y, size);
 // }
+
+function hueDebug(){
+    push();
+    colorMode(HSB, 360, 255, 255, 255);
+    _.times(360 / 19, i => {
+        fill(i * 20, 255, 255);
+        text("hue: " + i * 20, 50, 20 + (i * 20));
+        noStroke();
+        rect(50, 20 + (i * 20), 20, 20);
+    });
+    pop();
+}
