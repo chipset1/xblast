@@ -1,6 +1,5 @@
-// game spefic
-
 // general javascript util
+
 function returnRandom(array){
     // return a random element from an array
     return array[int(random(array.length))];
@@ -10,14 +9,9 @@ function inbetween(number, min, max){
     return (number > min && number < max);
 }
 
-
-function arrayRemove (array, from, to) {
-    var rest = array.slice((to || from) + 1 || array.length);
-    array.length = from < 0 ? array.length + from : from;
-    return array.push.apply(array, rest);
+function arrayRemove (array, from) {
+    return array.splice(from, 1);
 }
-
-
 
 function clog(){
     console.log.apply(null, Array.from(arguments));
