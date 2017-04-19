@@ -74,3 +74,12 @@ function wrapAroundCamera(sprite, camera){
         sprite.pos.x = camera.offsetX + width;
     }
 }
+
+function removeIfdead(entities){
+    for(var i = entities.length - 1; i >= 0; i--){
+        if(entities[i].isDead()){
+            arrayRemove(entities, i);
+
+        }
+    }
+}

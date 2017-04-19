@@ -26,14 +26,6 @@ var score = 0;
 var waveNumber = 1;
 var scoreParams = {killedEnemy: 100, pickUp: 10, hitByEnemy: -10};
 
-function removeIfdead(entities){
-    for(var i = entities.length - 1; i >= 0; i--){
-        if(entities[i].isDead()){
-            arrayRemove(entities, i);
-        }
-    }
-}
-
 function endScreen(){
     push();
     fill(255, 150);
