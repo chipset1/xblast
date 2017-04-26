@@ -49,6 +49,7 @@ function setup(){
     gameInit();
     gameAudio.backgroundLoop();
     textFont(font);
+    addCss();
 
     if(debug){
         var gui = new dat.GUI();
@@ -182,4 +183,15 @@ function displayScore(){
     text("wave:" + waveNumber, (width/17), height - 30);
     noStroke();
     pop();
+}
+
+function addCss(){
+    var css = document.createElement("style");
+    css.type = "text/css";
+    if(window.location.hostname === "chipset.itch.io"){
+        css.innerHTML = "canvas{ margin-top: 100px; }";
+    } else {
+        css.innerHTML = "canvas{ display: block; margin: 0 auto; margin-top: 100px; }";
+    }
+    document.body.appendChild(css);
 }
