@@ -111,6 +111,9 @@ function draw(){
 
 function keyPressed(){
     if(gameNotStarted && key === " "){
+        particleSystem.respawnExplosion(respawnPosition);
+        gameAudio.playExplosion();
+        gameAudio.playExplosion();
         gameBackground.transitionToStart();
         gameNotStarted=false;
     }
