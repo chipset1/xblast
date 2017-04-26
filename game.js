@@ -1,4 +1,5 @@
 "use strict";
+/* GLOBAL VARIABLES*/
 var debug = false;
 var debugText = textStackFn(20, 40, 20);
 var font;
@@ -29,7 +30,7 @@ function preload(){
 }
 
 function gameInit(){
-    // reset game state when game is restarted
+    // reset game state when restarted
     score = 0;
     waveNumber = 1;
     bullets = [];
