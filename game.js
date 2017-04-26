@@ -11,7 +11,6 @@ var player;
 var gameAudio;
 
 const dt = 1/60.0;
-var RESPAWN_POSITION;
 var currentTime = 0;
 
 var debug = false;
@@ -20,6 +19,8 @@ var gameNotStarted = true;
 var score = 0;
 var waveNumber = 1;
 var scoreParams = {killedEnemy: 100, pickUp: 10, hitByEnemy: -10};
+
+var respawnPosition;
 
 function preload(){
     gameAudio = new Audio();
@@ -34,7 +35,7 @@ function gameInit(){
     bullets = [];
     pickupManger = new PickupManger();
     enemyManager = new EnemyManager(bullets);
-    player = new Player(RESPAWN_POSITION.x, RESPAWN_POSITION.y, bullets);
+    player = new Player(respawnPosition.x, respawnPosition.y, bullets);
 }
 
 function setup(){
@@ -118,7 +119,7 @@ function keyPressed(){
         gameBackground.transitionToNormal();
         gameAudio.playExplosion();
         gameAudio.playExplosion();
-        particleSystem.respawnExplosion(RESPAWN_POSITION);
+        particleSystem.respawnExplosion(respawnPosition);
     }
 }
 
