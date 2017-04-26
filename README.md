@@ -12,7 +12,5 @@ A Shooter made with p5.js
 - [explosion](http://freesound.org/people/fridobeck/sounds/191691/)(CC BY-NC)
 - Bullets (unknown source) from sample pack downloaded years ago
 
-Ableton Live 9 project:
-- add
-requires Zebralette (free)
-https://www.u-he.com/cms/zebralette
+- [Ableton Live 9 project](https://github.com/chipset1/xblast/releases/download/1.0/game2.Project.zip)
+- requires Zebralette (free) https://www.u-he.com/cms/zebralette
