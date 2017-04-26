@@ -28,7 +28,7 @@ function Audio(){
     };
 
     self.playPickupEffect = function(){
-        pickupEffect.setVolume(0.2);
+        pickupEffect.setVolume(0.7);
         pickupEffect.play();
     };
 
