@@ -1,5 +1,7 @@
 "use strict";
+var debug = false;
 var debugText = textStackFn(20, 40, 20);
+var font;
 
 var gameBackground;
 var particleSystem;
@@ -13,8 +15,6 @@ var gameAudio;
 const dt = 1/60.0;
 var currentTime = 0;
 
-var debug = false;
-var font;
 var gameNotStarted = true;
 var score = 0;
 var waveNumber = 1;
