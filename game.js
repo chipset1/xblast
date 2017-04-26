@@ -41,7 +41,7 @@ function gameInit(){
 function setup(){
     // 3 : 2 aspect ratio
     createCanvas(1200, 800);
-    RESPAWN_POSITION = Object.freeze(createVector(width/2, height/2));
+    respawnPosition = Object.freeze(createVector(width/2, height/2));
     gameBackground = new Background();
     screenShake = new ScreenShake();
     particleSystem = new ParticleSystem();
