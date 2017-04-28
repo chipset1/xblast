@@ -1,6 +1,6 @@
 # XBLAST
 
-A Shooter made with p5.js
+A One Button Shooter made with p5.js
 
 ![gif](https://raw.githubusercontent.com/chipset1/xblast/master/xblast.gif)
 
