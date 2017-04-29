@@ -55,6 +55,7 @@ function EnemyManager(bullets){
                 score+=scoreParams.killedEnemy;
                 enemiesKilled++;
                 gameAudio.playExplosion();
+                gameBackground.lightUpArea(e.pos);
                 e.handleCollision("bullet");
                 player.applyForce(explosiveForce(e, player, 200));
                 self.applyExplosiveForce(b);
@@ -105,6 +106,7 @@ function EnemyManager(bullets){
                 }
                 gameAudio.playExplosion();
                 gameBackground.activateWhiteOutMode();
+                gameBackground.lightUpArea(e.pos);
                 score += scoreParams.hitByEnemy;
                 e.handleCollision("player");
                 self.applyExplosiveForce(e);

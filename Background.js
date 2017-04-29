@@ -17,6 +17,8 @@ function Background(){
         return defaultTri(x, y, {scale: 4.3, brightness: 32, saturation: 43});
     });
     var all = _.concat(bigTriangles, triangles);
+    var lightUpTransition = new Transition(1000);
+    var enemyPos = createVector();
 
     function defaultTri(x, y, customArgs){
         return new Tri(x, y, _.merge({scale: 2.5,
@@ -145,6 +147,11 @@ function Background(){
         whiteOutMode = true;
     };
 
+    self.lightUpArea = function(_enemyPos){
+        lightUpTransition.start();
+        enemyPos = _enemyPos.copy();
+    };
+
     function whiteOut(){
         if(whiteOutMode){
             var fillColor = mapCount(255, 0);
@@ -165,10 +172,23 @@ function Background(){
         }
     }
 
+    function lightUpArea(){
+        if(lightUpTransition.isRunning()){
+            all.forEach((tri)=>{
+                // tri.center().dist(enemyPos)
+                if(tri.pos.dist(enemyPos) < 130){
+                    tri.alpha = lightUpTransition.map(0.8, nextAlpha(tri));
+                    tri.saturation = lightUpTransition.map(20, tri.initialSaturation) + lightUpTransition.map(random(10.0), 0);
+                }
+            });
+        }
+    }
+
     self.display = function(){
         all.forEach(tri => {tri.alpha = nextAlpha(tri);});
         whiteOut();
         lowHealth();
+        lightUpArea();
         if(gameNotStarted) {
             all.forEach(tri =>{
                 tri.alpha = lerp(nextAlpha(tri), 1.0, 0.35);
